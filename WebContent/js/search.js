@@ -1456,6 +1456,8 @@ function RemoveDBMD(){
               if(data.STATUS == "OK"){
                 showalert("", data.MESSAGE, alert, "bottom");
                 $('#searchTable').bootstrapTable("removeAll");
+                $('#searchSelect').empty();
+                $('#searchSelect').selectpicker('refresh');
                 checkDBMD();
               }
               else{

@@ -210,6 +210,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				Path XMLModel = Paths.get((String) request.getSession().getAttribute("projectPath") + "/model.xml");
 				if(Files.exists(XMLModel)){
 					Files.copy(XMLModel, Paths.get(projectPath + "/model.xml"), StandardCopyOption.REPLACE_EXISTING);
+					isXML = true;
 				}
 			}
 			
