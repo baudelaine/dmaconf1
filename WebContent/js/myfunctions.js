@@ -4277,7 +4277,10 @@ function ChooseTable(table, sort) {
           $.each(tables, function(i, obj){
             //console.log(obj.name);
             // var dataContent = "<span class='label label-success'>" + obj.RecCount + "</span>";
-            var option = '<option class="fontsize" value="' + obj.table_name + '" data-subtext="' + obj.table_remarks +  ' ' + obj.table_stats + '">'
+            var tableType = "";
+            if(obj.table_remarks == null){obj.table_remarks = ""};
+            if(obj.table_type == "VIEW"){ tableType = '(' + obj.table_type + ')'};
+            var option = '<option class="fontsize" value="' + obj.table_name + '" data-subtext="' + tableType + ' ' + obj.table_remarks +  ' ' + obj.table_stats + '">'
              + obj.table_name + '</option>';
             table.append(option);
             // $('#modPKTables').append(option);
@@ -4297,8 +4300,13 @@ function ChooseTable(table, sort) {
         async: true,
         success: function(data) {
           console.log(data);
-          $.each(data.TABLES, function(i, tableName){
-            var option = '<option class="fontsize" value="' + tableName + '">' + tableName + '</option>';
+          $.each(data.TABLES, function(tableName, tableType){
+            if(tableType == "VIEW"){
+              var option = '<option class="fontsize" value="' + tableName + '" data-subtext="(' + tableType + ')">' + tableName + '</option>';
+            }
+            if(tableType == "TABLE"){
+              var option = '<option class="fontsize" value="' + tableName + '">' + tableName + '</option>';
+            }
             table.append(option);
           });
           table.selectpicker('refresh');

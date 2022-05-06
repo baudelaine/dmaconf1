@@ -64,7 +64,7 @@ public class GetTablesServlet extends HttpServlet {
 			
 			@SuppressWarnings("unchecked")
 			Map<String, QuerySubject> qsFromXML = (Map<String, QuerySubject>) request.getSession().getAttribute("QSFromXML");
-		    List<String> tables = new ArrayList<String>();
+		    Map<String, String> tables = new HashMap<String, String>();
 			
 			if(qsFromXML == null) {
 				con = (Connection) request.getSession().getAttribute("con");
@@ -92,12 +92,14 @@ public class GetTablesServlet extends HttpServlet {
 				    		break;
 				    }
 				    types = typesList.stream().toArray(String[]::new);
+				    System.out.println("types=" + types);
 			    }
 			    
 			    rst = metaData.getTables(con.getCatalog(), schema, "%", types);	
 			    
 			    while (rst.next()) {
-			    	tables.add(rst.getString("TABLE_NAME"));
+			    	tables.put(rst.getString("TABLE_NAME"), rst.getString("TABLE_TYPE"));
+			    	System.out.println(rst.getString("TABLE_NAME") + " - " + rst.getString("TABLE_TYPE"));
 			    }		    
 			    result.put("TABLES", tables);
 			    

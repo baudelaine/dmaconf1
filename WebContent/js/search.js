@@ -1630,9 +1630,14 @@ function ChooseTable(table, sort) {
       }
 
       $.each(tables, function(i, obj){
-        //console.log(obj.name);
-        var option = '<option class="fontsize" value="' + obj.table_name + '" data-subtext="' + obj.table_remarks +  ' ' + obj.table_stats + '">'
-         + obj.table_name + '</option>';
+        var option = "";
+        if(obj.table_remarks == null){obj.table_remarks = ""};
+        if(obj.table_type == "VIEW"){
+          option = '<option class="fontsize" value="' + obj.table_name + '" data-subtext="(' + obj.table_type + ') ' + obj.table_remarks +  ' ' + obj.table_stats + '">' + obj.table_name + '</option>';
+        }
+        if(obj.table_type == "TABLE"){
+          option = '<option class="fontsize" value="' + obj.table_name + '" data-subtext="' + obj.table_remarks +  ' ' + obj.table_stats + '">' + obj.table_name + '</option>';
+        }
         table.append(option);
         // $('#modPKTables').append(option);
         // table.append('<option class="fontsize" value=' + obj.name + '>' + obj.name + '</option>');
