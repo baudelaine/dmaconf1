@@ -65,9 +65,13 @@ $(".list-group a").click(function() {
       openBody += '<input id="searchinput" class="form-control" type="search" placeholder="Search..." autofocus/></div>';
       openBody += '<div id="searchlist" class="list-group">';
 
+      console.log(datas.PROJECTS);
+
       $.each(datas.PROJECTS, function(i, obj){
+        var tableType = "";
+        if(obj.resource.tableTypes != "TABLE") {tableType = '(' + obj.resource.tableTypes + ')'};
         openBody += '<a href="#" id="' + i +'" class="list-group-item"><span>' + obj.name + ' - ' + obj.timestamp + '<br>' +
-          obj.resource.dbName + ' - ' + obj.dbSchema + ' - ' + obj.resource.dbEngine +
+          obj.resource.dbName + ' ' + tableType + ' - ' + obj.dbSchema + ' - ' + obj.resource.dbEngine +
           '<br>' + obj.resource.cognosCatalog + ' - ' + obj.resource.cognosDataSource + ' - ' + obj.resource.cognosSchema +
           '<br>' + obj.description +
           '</span></a>';
@@ -418,9 +422,12 @@ function loadResources(obj, list){
       option = '<option class="fontsize" value="' + i + '" data-subtext="' + item.dbEngine + ' - ' + item.description + '">' + item.jndiName + '</option>';
     }
     else{
-    option = '<option class="fontsize" value="' + i + '" data-subtext="' + item.dbName + ' - ' + item.dbEngine
-      + ' - ' + item.cognosCatalog + ' - ' + item.cognosDataSource + ' - ' + item.cognosSchema
-      + '">' + item.jndiName + '</option>';
+      var tableType = "";
+      if(item.tableTypes != "TABLE") {tableType = '(' + item.tableTypes + ')'};
+
+      option = '<option class="fontsize" value="' + i + '" data-subtext="' + item.dbName + ' ' + tableType +' - ' + item.dbEngine
+        + ' - ' + item.cognosCatalog + ' - ' + item.cognosDataSource + ' - ' + item.cognosSchema
+        + '">' + item.jndiName + '</option>';
     }
     obj.append(option);
   });

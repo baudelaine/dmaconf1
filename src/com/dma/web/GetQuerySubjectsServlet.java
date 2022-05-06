@@ -236,15 +236,15 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		if(withRecCount && qsFromXML == null){
             long recCount = 0;
             
-            if(dbmd != null){
-            	System.out.println("Get recCount from DBMD...");
-				DBMDTable dbmdTable = dbmd.get(table);
-				if(dbmdTable != null){
-					result.setRecCount(dbmdTable.getTable_recCount());
-					qs_recCount = dbmdTable.getTable_recCount();
-				}
-			}            
-            else {
+//            if(dbmd != null){
+//            	System.out.println("Get recCount from DBMD...");
+//				DBMDTable dbmdTable = dbmd.get(table);
+//				if(dbmdTable != null){
+//					result.setRecCount(dbmdTable.getTable_recCount());
+//					qs_recCount = dbmdTable.getTable_recCount();
+//				}
+//			}            
+//            else {
             	System.out.println("Compute recCount...");
 	    		Statement stmt = null;
 	    		ResultSet rs = null;
@@ -275,7 +275,7 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		            if(rst != null){rst.close();}
 					
 				}
-            }
+//            }
 			
 		}
 		

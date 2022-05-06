@@ -7525,6 +7525,7 @@ $("#settings").click(function(){
 
       $("#prjjndiName").val(prj.resource.jndiName);
       $("#prjdbName").val(prj.resource.dbName);
+      $("#prjTableType").val(prj.resource.tableTypes);
       $("#prjdbEngine").val(prj.resource.dbEngine);
       $("#prjresdescription").val(prj.resource.description);
       $("#prjcognosCatalog").val(prj.resource.cognosCatalog);
