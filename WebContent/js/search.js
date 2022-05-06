@@ -1427,6 +1427,53 @@ function SaveDBMD(){
 
 }
 
+function RemoveDBMD(){
+
+  bootbox.confirm({
+    title: "Remove DBMD.",
+    message: "Do you want to remove DBMD ?",
+    buttons: {
+      cancel: {
+          label: 'Cancel',
+          className: 'btn btn-default'
+      },
+      confirm: {
+          label: 'Confirm',
+          className: 'btn btn-primary'
+      }
+    },
+    callback: function (result) {
+        console.log(result);
+        if(result){
+          $.ajax({
+            type: 'POST',
+            url: "RemoveDBMD",
+            dataType: 'json',
+        
+            success: function(data) {
+              console.log(data);
+              alert = "alert-success";
+              if(data.STATUS == "OK"){
+                showalert("", data.MESSAGE, alert, "bottom");
+                $('#searchTable').bootstrapTable("removeAll");
+                checkDBMD();
+              }
+              else{
+                alert = "alert-warning";
+                showalert("", data.MESSAGE, alert, "bottom");
+              }
+        
+            },
+            error: function(data) {
+              // showalert("RemoveDBMD()", "Database metadata file was not deleted or does not exists.", "alert-warning", "bottom");
+            }
+          });
+        }
+    }
+  });
+
+}
+
 
 function buildTable($el, cols) {
 
