@@ -6215,6 +6215,8 @@ $("#addLangMenu").click(function(){
 
 $("#removeLabels").click(function(){
 
+  console.log("enter in removeLabels");
+
   var lang = $("#langSelect").find("option:selected").val();
 
 	var flag = '<span class="lang-sm lang-lbl-full" lang="' + lang + '"></span>';
