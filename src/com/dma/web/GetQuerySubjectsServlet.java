@@ -399,14 +399,15 @@ public class GetQuerySubjectsServlet extends HttpServlet {
         Map<String, DBMDColumn> dbmdColumns = null;
         if(importLabel) {
 	        if(dbmd != null){
-	        	@SuppressWarnings("unused")
-				DBMDTable dbmdTable = dbmd.get(table);
+	        	DBMDTable dbmdTable = dbmd.get(table);
 				if(dbmdTable != null){
 					dbmdColumns = dbmdTable.getColumns();
 				}
 	        }
         }
 		
+        int fieldPos = 0;
+        
         while (rst.next()) {
         	String field_name = rst.getString("COLUMN_NAME");
         	String field_type = rst.getString("TYPE_NAME");
@@ -416,6 +417,7 @@ public class GetQuerySubjectsServlet extends HttpServlet {
         	field.setField_type(field_type);
         	field.setLabel("");
         	field.setDescription("");
+        	field.setFieldPos(fieldPos++);
         	
         	if(importLabel) {
 	        	field.setLabel(rst.getString("REMARKS"));

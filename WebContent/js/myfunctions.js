@@ -177,6 +177,7 @@ qsCols.push({field:"linker_ids", title: "linker_ids"});
 var fieldCols = [];
 // fieldCols.push({field:"checkbox", checkbox: "true"});
 fieldCols.push({field:"index", title: '<h4><span class="label label-default">index</span>', formatter: "indexFormatter", sortable: false});
+fieldCols.push({field:"fieldPos", title: '<h4><span class="label label-default">Pos</span>', sortable: true});
 fieldCols.push({field:"field_name", title: '<h4><span class="label label-default">Name</span>', sortable: true });
 fieldCols.push({field:"alias", title: '<h4><span class="label label-default">Alias</span>', sortable: false, editable: {type: "textarea", mode: "inline", rows: 2}});
 fieldCols.push({class:"field_type", field:'field_type', title: '<h4><span class="label label-default">Type</span>', editable: {type: "text", mode: "inline"}, sortable: true});
@@ -852,6 +853,21 @@ function addSelectInpKeyPress(t,ev){
       ev.preventDefault();
       addSelectItem($(t).next(),ev);
    }
+}
+
+function dynamicSort(property) {
+  var sortOrder = 1;
+  if(property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
+  }
+  return function (a,b) {
+      /* next line works with strings and numbers, 
+       * and you may want to customize it to your needs
+       */
+      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      return result * sortOrder;
+  }
 }
 
 function SetLanguage(language){
@@ -3162,10 +3178,10 @@ function buildRelationTable($el, cols, data, qs){
               });
 
             }
-            if(!allowNommageRep){
-              showalert("buildRelationTable()", "RepTableName for pktable_alias " + row.pktable_alias + " already checked.", "alert-warning", "bottom");
-              return;
-            }
+            // if(!allowNommageRep){
+            //   showalert("buildRelationTable()", "RepTableName for pktable_alias " + row.pktable_alias + " already checked.", "alert-warning", "bottom");
+            //   return;
+            // }
             var newValue = value == false ? true : false;
             updateCell($el, row.index, field, newValue);
 
@@ -3833,10 +3849,13 @@ function AddNewDimension() {
 }
 
 
+
+
 function GetNewField($el) {
 
   var fieldName;
   var rows = $el.bootstrapTable('getData');
+  var nextIndex = $el.bootstrapTable("getData").length;
 
 
   bootbox.prompt({
@@ -3874,6 +3893,7 @@ function GetNewField($el) {
             if(activeTab.match("View")){
               data.role = "Folder"
             }
+            data.fieldPos = nextIndex;
             AddRow($el, data);
           },
           error: function(data) {
@@ -6003,9 +6023,65 @@ $('#CSVViewsFile').change(function(){
 
 })
 
+$('#CSVQssFile').change(function(){
+
+  var fd = new FormData();
+
+  var qss = $datasTable.bootstrapTable("getData");
+  var lang = $("#langSelect").find("option:selected").val();
+  var parms = {};
+  parms.qss = JSON.stringify(qss);
+  parms.lang = lang;
+  console.log(parms);
+  console.log(JSON.stringify(parms));
+
+  fd.append('json', JSON.stringify(parms));
+
+  var file = $(this)[0].files[0];
+  console.log(file);
+
+  fd.append('file', file, 'qss.csv');
+  console.log(fd);
+
+  $.ajax({
+    url: "LoadQss",
+    type: "POST",
+    data: fd,
+    enctype: 'multipart/form-data',
+    // dataType: 'application/text',
+    processData: false,  // tell jQuery not to process the data
+    contentType: false,   // tell jQuery not to set contentType
+    success: function(data) {
+      console.log(data);
+      if(data.STATUS == "OK"){
+        showalert(data.FROM, data.MESSAGE, "alert-success", "bottom");
+        // console.log(Object.values(data.DATAS));
+        $('#DatasTable').bootstrapTable("load", Object.values(data.DATAS));
+        // $("#viewTab").removeClass('disabled');
+        // $viewTab.prop('disabled',false);
+        $("#sortQss").trigger("click");
+      
+      }
+      else{
+        showalert(data.ERROR, data.MESSAGE, "alert-danger");
+      }
+
+		},
+		error: function(data) {
+      console.log(data);
+		}
+  });
+
+  $(this).val('');  
+
+})
+
 $("#loadViews").click(function(){
   $('#CSVViewsFile').trigger('click');
+})
 
+$("#loadQss").click(function(){
+  $('#CSVQssFile').trigger('click');
 })
 
 $("#ulActionLog").click(function(){
@@ -6213,6 +6289,52 @@ $("#addLangMenu").click(function(){
 	$("#langList").selectpicker("refresh");
 })
 
+$("#removeLabel").click(function(){
+
+  var qs = $("#qsSelect").find("option:selected").val();
+
+  if(qs == ""){
+    showalert("", "Select a Query Subject.", "alert-warning", "bottom");
+    $("#qsSelect").selectpicker('toggle');
+    return;
+  }
+
+  var qsId = $("#qsSelect").find("option:selected").text();  
+  console.log(qs);
+  console.log(qsId);
+
+  var lang = $("#langSelect").find("option:selected").val();
+	var flag = '<span class="lang-sm lang-lbl-full" lang="' + lang + '"></span>';
+  console.log(flag);
+
+  bootbox.confirm({
+    title: "Removing label.",
+    message: flag + " label for " + qsId + " will be dropped.",
+    buttons: {
+      cancel: {
+          label: 'Cancel',
+          className: 'btn btn-default'
+      },
+      confirm: {
+          label: 'Confirm',
+          className: 'btn btn-primary'
+      }
+    },
+    callback: function(result){
+      if(result){
+        removeLabel(lang, qsId);
+				// $("#langSelect").find("option:selected").remove();
+				// var emptyOption = '<option class="fontsize" value="" data-subtext="" data-content=""></option>';
+				// $("#langSelect").selectpicker("val", currentProject.languages[0]);
+				// $("#langSelect").selectpicker("refresh");
+        // SetLanguage(currentProject.languages[0]);
+      }
+    }
+  });
+
+})
+
+
 $("#removeLabels").click(function(){
 
   console.log("enter in removeLabels");
@@ -6223,7 +6345,7 @@ $("#removeLabels").click(function(){
 
   bootbox.confirm({
     title: "Removing labels.",
-    message: flag + " labels will be dropped.",
+    message: "All " + flag + " labels will be dropped.",
     buttons: {
       cancel: {
           label: 'Cancel',
@@ -6286,20 +6408,55 @@ $("#removeLangMenu").click(function(){
   });
 })
 
+function removeLabel(lang, qsId){
+  console.log(lang);
+  console.log(qsId);
+  $datasTable.bootstrapTable("filterBy", {});
+  var qss = $datasTable.bootstrapTable('getData');
+  $.each(qss, function(i, qs){
+    if(qs._id == qsId){
+      console.log(qs);
+      delete qs.labels[lang];
+      delete qs.descriptions[lang];
+      qs.label = "";
+      qs.description = "";
+      $.each(qs.fields, function(j, field){
+        if(field.custom == false){
+          delete field.labels[lang];
+          delete field.descriptions[lang];
+          field.label = "";
+          field.description = "";
+        }
+      })
+      $.each(qs.relations, function(j, rel){
+        delete rel.labels[lang];
+        delete rel.descriptions[lang];
+        rel.label = "";
+        rel.description = "";
+      })
+    }
+  })
+  $refTab.tab('show');
+  $qsTab.tab('show');
+}
+
 function removeLabels(lang){
   console.log(lang);
   $datasTable.bootstrapTable("filterBy", {});
   var qss = $datasTable.bootstrapTable('getData');
   $.each(qss, function(i, qs){
+    console.log(qs);
     delete qs.labels[lang];
     delete qs.descriptions[lang];
     qs.label = "";
     qs.description = "";
     $.each(qs.fields, function(j, field){
-      delete field.labels[lang];
-      delete field.descriptions[lang];
-      field.label = "";
-      field.description = "";
+      if(field.custom == false){
+        delete field.labels[lang];
+        delete field.descriptions[lang];
+        field.label = "";
+        field.description = "";
+      }
     })
     $.each(qs.relations, function(j, rel){
       delete rel.labels[lang];
@@ -8001,6 +8158,61 @@ $("#saveRel").click(function(){
 
 })
 
+sortQss.addEventListener('click', function(event){
+
+  $datasTable.bootstrapTable("filterBy", {});
+
+  var qss = $datasTable.bootstrapTable("getData");
+
+  if(qss.length > 0){
+    $.each(qss, function(i, qs){
+      qs.fields.sort((a, b) => parseInt(a.fieldPos) - parseInt(b.fieldPos));
+    })
+  }
+
+  event.preventDefault();
+}, false);
+
+downloadQss.addEventListener('click', function(event){
+
+  var qss = $datasTable.bootstrapTable("getData");
+
+  if(qss.length == 0){
+    showalert("Nothing to do", "No Query Subjects found.", "alert-info", "bottom");
+    return;
+  }
+
+  var lang = $("#langSelect").find("option:selected").val();
+
+  var parms = {"qss": JSON.stringify(qss), "delim": ";", "lang": lang}
+
+  console.log(parms);
+
+  $.ajax({
+    type: 'POST',
+    url: "SaveQss",
+    dataType: 'json',
+    data: JSON.stringify(parms),
+
+    success: function(data) {
+      console.log(data);
+      if(data.STATUS == "OK"){
+        showalert(data.FROM, data.MESSAGE, "alert-success", "bottom");
+        window.location.href = "DownloadQssAsCSV";
+      }
+      else{
+        showalert(data.FROM, data.MESSAGE, "alert-warning", "bottom");
+      }
+    },
+    error: function(data) {
+      console.log(data);
+    }
+  });
+  
+  event.preventDefault();
+}, false);
+
+
 downloadViews.addEventListener('click', function(event){
 
   var vues = $('#ViewsTable').bootstrapTable("getData");
@@ -8036,9 +8248,6 @@ downloadViews.addEventListener('click', function(event){
       console.log(data);
     }
   });
-
-
-
   
   event.preventDefault();
 }, false);

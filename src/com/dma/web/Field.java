@@ -37,6 +37,7 @@ public class Field {
 	String alias = "";
 	String folder = "";
 	String role = "Field";
+	int fieldPos = 0;
 	
 	public String getBK() {
 		return BK;
@@ -217,6 +218,12 @@ public class Field {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	public int getFieldPos() {
+		return fieldPos;
+	}
+	public void setFieldPos(int fieldPos) {
+		this.fieldPos = fieldPos;
 	}
 	
 }
