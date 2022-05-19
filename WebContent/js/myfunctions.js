@@ -6111,21 +6111,24 @@ $("#updateModel").click(function(){
     success: function(data) {
         console.log(data);
 
-        if(jQuery.isEmptyObject(data.DATAS)){
-          bootbox.alert({
-            message: "Model is already up to date.",
-            size: "small",
-            callback: function(result){
-            }
-          });          
+        // if(jQuery.isEmptyObject(data.DATAS)){
+        //   bootbox.alert({
+        //     message: "Model is already up to date.",
+        //     size: "small",
+        //     callback: function(result){
+        //     }
+        //   });          
 
-        }
-        else{
+        // }
+        // else{
 
           $datasTable.bootstrapTable("load", data.MODEL);
           var list = '<ul class="list-group">';
-          $.each(Object(data.DATAS), function(key, value){
-            list += '<li class="list-group-item">' + key + '<span class="badge">' + value.length + '</span>' + '</li>';
+          $.each(Object(data.ADDED), function(key, value){
+            list += '<li class="list-group-item">' + key + '<span class="badge"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true">' + value.length + '</span>' + '</li>';
+          })
+          $.each(Object(data.REMOVED), function(key, value){
+            list += '<li class="list-group-item">' + key + '<span class="badge"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true">' + value.length + '</span>' + '</li>';
           })
           list += '</ul>';
 
@@ -6135,7 +6138,7 @@ $("#updateModel").click(function(){
             callback: function(result){
             }
           });  
-        }        
+        // }        
 
     },
     error: function(data) {

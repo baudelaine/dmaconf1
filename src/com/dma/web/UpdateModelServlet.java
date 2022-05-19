@@ -241,30 +241,40 @@ public class UpdateModelServlet extends HttpServlet {
 									}
 								}
 							}
-							fieldsToRemove.put(qs.get_id(), fldToRemove);
-							
+							if(fldToRemove.size() > 0) {
+								fieldsToRemove.put(qs.get_id(), fldToRemove);
+							}
 						}
 					}
 					
 				}
 				
-				Map<String, List<Field>> datas = new HashMap<String, List<Field>>();
+				Map<String, List<Field>> fldsToAdd = new HashMap<String, List<Field>>();
 				
 				for(QuerySubject qs: model) {
 					String table = qs.getTable_name();
 					if(newFields.containsKey(table)) {
-						datas.put(qs.get_id(), newFields.get(table));
+						fldsToAdd.put(qs.get_id(), newFields.get(table));
 						qs.getFields().addAll(newFields.get(table));
 					}
 					if(fieldsToRemove.containsKey(qs.get_id())) {
 						List<Field> fldsToRemove = fieldsToRemove.get(qs.get_id());
+//						datas.remove(qs.get_id(), fldsToRemove);
 						qs.getFields().removeAll(fldsToRemove);
+					}
+				}
+				
+				for(QuerySubject qs: model) {
+					List<Field> fields = qs.getFields();
+					int fieldPos = 0;
+					for(Field field: fields) {
+						field.setFieldPos(fieldPos++);
 					}
 				}
 				
 				result.put("MODEL", model);
 				result.put("REMOVED", fieldsToRemove);
-				result.put("DATAS", datas);
+				result.put("ADDED", fldsToAdd);
 				result.put("STATUS", "OK");
 			}
 			else {
