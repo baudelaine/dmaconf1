@@ -7,7 +7,6 @@
 7. Pouvoir exporter/importer un fichier excel représentant l'onglet "Query subject" afin de pouvoir le réordonner, changer les labels et le recharger. (Le but est de donner le fichier et users puis le recharger)
 8. Avoir un index sur le numéro du champ afin de toujours pouvoir remettre le classement initial. Calculer un index pour les champs custom toujours à la suite des champs réels en utilisant l'ordre dans lequel ils sont dans le json
 9. Pouvoir faire une mise à jour du modèle en recalculant l'index des champs (si un champ a été ajouté par ex au milieu ou supprimé) La mise a jour doit tenir compte des champs supprimés. Les champs déjà présents doivent être récupérés et associés au nouvel index)
-
 10. Enlever le controle de la coche reptableName (ca fait perdre du temps)
 -> comment 3181-3184 in myfunctions.js
 

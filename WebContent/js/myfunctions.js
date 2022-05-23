@@ -31,6 +31,7 @@ var $selectedDimension;
 var selectedField;
 var selectedQS;
 var currentProject;
+var pKeys = {};
 // var currentLanguage;
 
 var countryCodes = ["ar", "be", "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "ga", "hi", "hr", "hu", "in", "is", "it", "iw", "ja", "ko", "lt", "lv", "mk", "ms", "mt", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh"];
@@ -3956,6 +3957,7 @@ function GetPKRelations(table_name, table_alias, type){
 
 	console.log("calling GetPKRelations with: " + parms);
 
+
   $.ajax({
     type: 'POST',
     url: "GetPKRelations",
@@ -3971,8 +3973,14 @@ function GetPKRelations(table_name, table_alias, type){
   			}
       }
 
+    
+
       if(data.STATUS == "OK" && data.DATAS.length > 0){
         if($activeSubDatasTable != undefined){
+
+          $('#PKModal').modal('toggle');
+          // $("#PKList").selectpicker("val", emptyOption);
+          $("#PKList").selectpicker("refresh");
 
           var index;
           var datas = $datasTable.bootstrapTable("getData");
@@ -3981,15 +3989,24 @@ function GetPKRelations(table_name, table_alias, type){
               index = i;
             }
           })
+          pKeys["QSIndex"] = index;
           var relations = datas[index].relations;
 
+          $('#PKList').empty();
           $.each(data.DATAS, function(i, obj){
-            $datasTable.bootstrapTable("getData")[index].relations.push(obj);
-          });
+            var option = '<option class="fontsize" value="' + obj._id + '" data-subtext="(' + obj.recCountPercent + '%) ' + obj.relationship + '">' + obj.key_name + '</option>';
+            $('#PKList').append(option);
+            pKeys[obj._id] = obj;
 
-          $datasTable.bootstrapTable("collapseRow", index);
-          $datasTable.bootstrapTable("expandRow", index);
-          showalert(data.DATAS.length + " PK relation(s) successfully retrieved from " + data.MODE + ".", "", "alert-success", "bottom");
+            // $datasTable.bootstrapTable("getData")[index].relations.push(obj);
+          });
+          $("#PKList").selectpicker("refresh");
+
+          console.log(index);
+
+          // $datasTable.bootstrapTable("collapseRow", index);
+          // $datasTable.bootstrapTable("expandRow", index);
+          // showalert(data.DATAS.length + " PK relation(s) successfully retrieved from " + data.MODE + ".", "", "alert-success", "bottom");
 
         }
       }
@@ -4006,6 +4023,22 @@ function GetPKRelations(table_name, table_alias, type){
   });
 
 }
+
+$("#addPK").click(function(){
+	var pks = ($("#PKList").val());
+	if(pks && pKeys){
+    console.log(pks);
+    console.log(pKeys);
+    var index = pKeys["QSIndex"];
+    $.each(pks, function(i, pk){
+      $datasTable.bootstrapTable("getData")[index].relations.push(pKeys[pk]);
+    });
+		$('#PKModal').modal('toggle');
+    $datasTable.bootstrapTable("collapseRow", index);
+    $datasTable.bootstrapTable("expandRow", index);
+    showalert(pks.length + " PK relation(s) successfully retrieved.", "", "alert-success", "bottom");
+	}
+})
 
 function GetQuerySubjects(table_name, table_alias, type, linker_id, index) {
 
