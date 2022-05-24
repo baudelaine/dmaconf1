@@ -31,7 +31,7 @@ public class QuerySubject {
 	Map<String, String> descriptions = new HashMap<String, String>();
 	String merge = "";
 	Map<String, Filter> filters = new HashMap<String, Filter>(); 
-	String hiddenQuery = "";
+	String hiddenQuery = "SELECT $TABLE.$FIELD FROM $TABLE WHERE $TABLE.$FIELD IS NOT NULL AND $TABLE.$FIELD != '0'";
 	boolean tableExists = true;
 	
 	

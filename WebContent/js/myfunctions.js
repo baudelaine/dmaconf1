@@ -4037,6 +4037,7 @@ $("#addPK").click(function(){
     $datasTable.bootstrapTable("collapseRow", index);
     $datasTable.bootstrapTable("expandRow", index);
     showalert(pks.length + " PK relation(s) successfully retrieved.", "", "alert-success", "bottom");
+    pKeys = {};
 	}
 })
 
@@ -5665,11 +5666,11 @@ function GetLabelsMultiLang(){
 
     success: function(labels) {
       console.log(labels);
-      labels = labels.DATAS;
       if(labels.STATUS == "KO"){
         ShowAlert("ERROR: " + labels.MESSAGE + "<br>TROUBLESHOOTING: " + labels.TROUBLESHOOTING, "alert-danger", $("#queryModalAlert"));
       }
       else{
+        labels = labels.DATAS;
         var currentLanguage = $('#langSelect').find("option:selected").val();
         $.each($datasTable.bootstrapTable('getData'), function(i, qs){
           if(labels[qs.table_name]){
@@ -6318,6 +6319,31 @@ function setHidden(){
   $("#hiddenQueryModal").modal("toggle");
 
 }
+
+$("#setHiddenAll").click(function(){
+
+  var qss = $datasTable.bootstrapTable('getData');
+  var parms = {"qss": JSON.stringify(qss)};
+
+  $.ajax({
+		type: 'POST',
+		url: "SetHiddenAll",
+		dataType: 'json',
+    data: JSON.stringify(parms),
+
+		success: function(data) {
+      console.log(data.DATAS);
+      if(data.STATUS = "OK"){
+        $datasTable.bootstrapTable('load', data.DATAS);
+        $datasTable.bootstrapTable('collapseAllRows');
+        showalert(data.FROM, data.MESSAGE, "alert-success", "bottom");
+      }
+		},
+		error: function(data) {
+      console.log(data);
+		}
+	});
+})
 
 $("#addLangMenu").click(function(){
 	$('#langModal').modal('toggle');
