@@ -90,8 +90,21 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 		
 		try{
 		
+			result.put("CLIENT", request.getRemoteAddr() + ":" + request.getRemotePort());
+			result.put("SERVER", request.getLocalAddr() + ":" + request.getLocalPort());
+			
+			result.put("FROM", this.getServletName());
+			
 			String user = request.getUserPrincipal().getName();
-			result.put("USER", user);			
+			result.put("USER", user);
+
+			result.put("JSESSIONID", request.getSession().getId());
+			
+			Path wks = Paths.get(getServletContext().getRealPath("/datas") + "/" + user);			
+			result.put("WKS", wks.toString());
+			
+			Path prj = Paths.get((String) request.getSession().getAttribute("projectPath"));
+			result.put("PRJ", prj.toString());
 			
 			Map<String, Object> parms = Tools.fromJSON(request.getInputStream());
 			
@@ -829,7 +842,16 @@ public class SendQuerySubjectsServlet extends HttpServlet {
             if(axisFault != null && axisFault.length > 0) {
             	result.put("AXISFAULT", axisFault);
             }
-            e.printStackTrace(System.err);			}
+            e.printStackTrace(System.err);
+            // START Write error file to server  
+			Path prj = Paths.get((String) request.getSession().getAttribute("projectPath"));
+			Path dlDir = Paths.get(prj + "/downloads");
+			Path errorFile = Paths.get(dlDir + "/error.json");
+			Files.write(errorFile, Tools.toJSON(result).getBytes());
+			errorFile.toFile().setReadable(true, false);
+            // END Write error file to server  
+            
+        }
 		
 		finally {
 			//response to the browser

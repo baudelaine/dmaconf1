@@ -4752,6 +4752,7 @@ function Publish(projectName, applyActionLogs){
       }
       else{
         showalert(data.ERROR, data.MESSAGE + ": " + data.AXISFAULT + "<br>" + data.TROUBLESHOOTING, "alert-danger");
+        window.location.href = "DLErrorFile";
       }
     },
     error: function(data) {
