@@ -8,12 +8,9 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -137,27 +134,27 @@ public class NewProjectServlet extends HttpServlet {
 	            result.put("STACKTRACE", sw.toString());
 			}
 			try{
-				Set<PosixFilePermission> perms = new HashSet<>();
-			    perms.add(PosixFilePermission.OWNER_READ);
-			    perms.add(PosixFilePermission.OWNER_WRITE);
-			    perms.add(PosixFilePermission.OWNER_EXECUTE);
 
-			    perms.add(PosixFilePermission.OTHERS_READ);
-			    perms.add(PosixFilePermission.OTHERS_WRITE);
-			    perms.add(PosixFilePermission.OTHERS_EXECUTE);
-
-			    perms.add(PosixFilePermission.GROUP_READ);
-			    perms.add(PosixFilePermission.GROUP_WRITE);
-			    perms.add(PosixFilePermission.GROUP_EXECUTE);		
-				
 				Files.createDirectories(projectPath);
-				Files.setPosixFilePermissions(projectPath, perms);
+				projectPath.toFile().setExecutable(true, false);
+				projectPath.toFile().setReadable(true, false);
+				projectPath.toFile().setWritable(true, false);
+				
 				Path modelPath = Paths.get(projectPath + "/models");
 				Files.createDirectories(modelPath);
-				Files.setPosixFilePermissions(modelPath, perms);
+				modelPath.toFile().setExecutable(true, false);
+				modelPath.toFile().setReadable(true, false);
+				modelPath.toFile().setWritable(true, false);
 				Path queriesPath = Paths.get(projectPath + "/queries");
 				Files.createDirectories(queriesPath);
-				Files.setPosixFilePermissions(queriesPath, perms);
+				queriesPath.toFile().setExecutable(true, false);
+				queriesPath.toFile().setReadable(true, false);
+				queriesPath.toFile().setWritable(true, false);
+				Path downloadsPath = Paths.get(projectPath + "/downloads");
+				Files.createDirectories(downloadsPath);
+				downloadsPath.toFile().setExecutable(true, false);
+				downloadsPath.toFile().setReadable(true, false);
+				downloadsPath.toFile().setWritable(true, false);
 				
 				result.put("STATUS", "OK");
 				result.put("PROJECT_PATH", projectPath.toString());

@@ -235,7 +235,7 @@ public class CognosSVC {
 				//System.out.println(root.asXML());
 				@SuppressWarnings("unused")
 				String res = crnConnect.getMetadataService().updateMetadata(xex).toString();
-				return xex.get_value();
+				return root.asXML();
 				
 			} catch (DocumentException ex) {
 				lg(ex.getMessage());
