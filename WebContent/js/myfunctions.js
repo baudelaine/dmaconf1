@@ -4728,7 +4728,6 @@ function Publish(projectName, applyActionLogs){
       // $('#DatasTable').bootstrapTable('load', data);
       console.log(data);
       if(data.STATUS == "OK"){
-        window.location.href = "DLActionLogFile";
         showalert("Publish()", data.MESSAGE, "alert-success", "bottom");
         parms = {"publishedModelName": projectName};
         $.ajax({
@@ -4743,6 +4742,7 @@ function Publish(projectName, applyActionLogs){
             if(data.STATUS == "OK"){
               showalert(data.FROM, data.MESSAGE, "alert-success", "bottom");
               window.location.href = "DLPublishedModel";
+              window.location.href = "DLActionLogFile";
             }
           },
           error: function(data) {
