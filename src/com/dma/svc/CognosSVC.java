@@ -183,7 +183,7 @@ public class CognosSVC {
 		} 
 	}
 
-	public void executeAllActions() throws DocumentException, RemoteException {
+	public String executeAllActions() throws DocumentException, RemoteException {
 		
 		int j=1;
 		int m=1000;
@@ -235,6 +235,7 @@ public class CognosSVC {
 				//System.out.println(root.asXML());
 				@SuppressWarnings("unused")
 				String res = crnConnect.getMetadataService().updateMetadata(xex).toString();
+				return xex.get_value();
 				
 			} catch (DocumentException ex) {
 				lg(ex.getMessage());
@@ -252,6 +253,7 @@ public class CognosSVC {
 
 			}	
 		}
+		return null;
 	}
 	
 	public void createPublicFolder(String newFolderName) {

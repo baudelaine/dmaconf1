@@ -4728,6 +4728,7 @@ function Publish(projectName, applyActionLogs){
       // $('#DatasTable').bootstrapTable('load', data);
       console.log(data);
       if(data.STATUS == "OK"){
+        window.location.href = "DLActionLogFile";
         showalert("Publish()", data.MESSAGE, "alert-success", "bottom");
         parms = {"publishedModelName": projectName};
         $.ajax({
