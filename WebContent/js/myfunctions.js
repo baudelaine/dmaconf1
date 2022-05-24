@@ -4742,7 +4742,7 @@ function Publish(projectName, applyActionLogs){
             if(data.STATUS == "OK"){
               showalert(data.FROM, data.MESSAGE, "alert-success", "bottom");
               window.location.href = "DLPublishedModel";
-              window.location.href = "DLActionLogFile";
+              // window.location.href = "DLActionLogFile";
             }
           },
           error: function(data) {
