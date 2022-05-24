@@ -94,20 +94,21 @@ public class GetLabelsServlet extends HttpServlet {
 					Map<String, Map<String, String>> cdMap = new HashMap<String, Map<String, String>>();
 					
 					String tlQuery = (String) parms.get("tlQuery");
-					System.out.println("tlQuery=" + tlQuery);
-					if(!tlQuery.isEmpty() && StringUtils.countMatches(tlQuery, "(?)") == 1){
-						String tableInClause = Tools.splitInClause(tlQuery, tables, 1000);
-
-						tlQuery = StringUtils.replace(tlQuery, "(?)", tableInClause);
-						System.out.println("tlQuery=" + tlQuery);
-						stmt = con.prepareStatement(tlQuery);
-						rst = stmt.executeQuery();
-						while(rst.next()){
-							tlMap.put(rst.getString("Table_Name").toUpperCase(), rst.getString("Table_Label"));
-						}
-						rst.close();
-						stmt.close();					
-					}
+                    System.out.println("tlQuery=" + tlQuery);
+                    if(!tlQuery.isEmpty() && StringUtils.countMatches(tlQuery, "($TABLES)") == 1){
+                            String tableInClause = Tools.splitInClause(tlQuery, tables, 1000);
+                            System.out.println("tableInClause=" + tableInClause);
+                            tlQuery = StringUtils.replace(tlQuery, "($TABLES)", tableInClause);
+                    		
+                            System.out.println("tlQuery=" + tlQuery);
+                            stmt = con.prepareStatement(tlQuery);
+                            rst = stmt.executeQuery();
+                            while(rst.next()){
+                                tlMap.put(rst.getString("Table_Name").toUpperCase(), rst.getString("Table_Label"));
+                            }
+                            rst.close();
+                            stmt.close();
+                    }
 					else {
 						for(String table: tables) {
 							tlMap.put(table.toUpperCase(), "");
@@ -116,9 +117,9 @@ public class GetLabelsServlet extends HttpServlet {
 					
 					String tdQuery = (String) parms.get("tdQuery");
 					System.out.println("tdQuery=" + tdQuery);
-					if(!tdQuery.isEmpty() && StringUtils.countMatches(tdQuery, "(?)") == 1){
+					if(!tdQuery.isEmpty() && StringUtils.countMatches(tdQuery, "($TABLES)") == 1){
 						String tableInClause = Tools.splitInClause(tdQuery, tables, 1000);
-						tdQuery = StringUtils.replace(tdQuery, "(?)", tableInClause);
+						tdQuery = StringUtils.replace(tdQuery, "($TABLES)", tableInClause);
 						stmt = con.prepareStatement(tdQuery);
 						System.out.println("tdQuery=" + tdQuery);
 						rst = stmt.executeQuery();
@@ -148,10 +149,10 @@ public class GetLabelsServlet extends HttpServlet {
 						rst.close();
 	
 						String clQuery = (String) parms.get("clQuery");
-						if(!clQuery.isEmpty() && StringUtils.countMatches(clQuery, "(?)") == 1 && StringUtils.countMatches(clQuery, " ? ") == 1){
+						if(!clQuery.isEmpty() && StringUtils.countMatches(clQuery, "($FIELDS)") == 1 && StringUtils.countMatches(clQuery, " $TABLE ") == 1){
 							String columnInClause = Tools.splitInClause(clQuery, fields, 1000);
-							clQuery = StringUtils.replace(clQuery, "(?)", columnInClause);
-							clQuery = StringUtils.replace(clQuery, " ? ", " '" + table + "' ");
+							clQuery = StringUtils.replace(clQuery, "($FIELDS)", columnInClause);
+							clQuery = StringUtils.replace(clQuery, " $TABLE ", " '" + table + "' ");
 							
 							Map<String, String> cols = new HashMap<String, String>();
 							
@@ -178,10 +179,10 @@ public class GetLabelsServlet extends HttpServlet {
 						}
 						
 						String cdQuery = (String) parms.get("cdQuery");
-						if(!cdQuery.isEmpty() && StringUtils.countMatches(cdQuery, "(?)") == 1 && StringUtils.countMatches(cdQuery, " ? ") == 1){
+						if(!cdQuery.isEmpty() && StringUtils.countMatches(cdQuery, "($FIELDS)") == 1 && StringUtils.countMatches(cdQuery, " $TABLE ") == 1){
 							String columnInClause = Tools.splitInClause(cdQuery, fields, 1000);
-							cdQuery = StringUtils.replace(cdQuery, "(?)", columnInClause);
-							cdQuery = StringUtils.replace(cdQuery, " ? ", " '" + table + "' ");
+							cdQuery = StringUtils.replace(cdQuery, "($FIELDS)", columnInClause);
+							cdQuery = StringUtils.replace(cdQuery, " $TABLE ", " '" + table + "' ");
 							
 							
 							Map<String, String> cols = new HashMap<String, String>();

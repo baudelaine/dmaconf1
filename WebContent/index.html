@@ -709,19 +709,20 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
 								<div class="collapse" id="tableLabelSyntax">
 								  <div class="well well-sm">
-								    SELECT ... AS Table_Name, ... AS Table_Label FROM ... IN (?)
+								    SELECT ... AS Table_Name, ... AS Table_Label FROM ... IN ($TABLES)
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
 								<div class="collapse" id="tableLabelAboutParameter">
 								  <div class="well well-sm">
-								    (?) stand for a list of tables.
+								    ($TABLES) stand for a list of tables.
+									<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> <strong>Case is sensitive</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
 								<div class="collapse" id="tableLabelEG">
 								  <div class="well well-sm">
-								    <strong>SELECT</strong> table <strong>AS Table_Name,</strong> label <strong>AS Table_Label FROM</strong> tablelabels where table <strong>IN (?)</strong> and lang = 'en'
+								    <strong>SELECT</strong> table <strong>AS Table_Name,</strong> label <strong>AS Table_Label FROM</strong> tablelabels where table <strong>IN ($TABLES)</strong> and lang = 'en'
 										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
 								  </div>
 								</div>
@@ -729,14 +730,14 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelEG1" aria-expanded="false" aria-controls="collapseExample">e.g. MAXIMO</a>
 								<div class="collapse" id="tableLabelEG1">
 								  <div class="well well-sm">
-										SELECT MAXIMO.MAXTABLE.TABLENAME AS Table_Name, MAXIMO.MAXOBJECT.DESCRIPTION AS Table_Label FROM MAXIMO.MAXTABLE join MAXIMO.MAXOBJECT on MAXIMO.MAXTABLE.TABLENAME = MAXIMO.MAXOBJECT.OBJECTNAME where MAXTABLE.TABLENAME IN (?)
+										SELECT MAXIMO.MAXTABLE.TABLENAME AS Table_Name, MAXIMO.MAXOBJECT.DESCRIPTION AS Table_Label FROM MAXIMO.MAXTABLE join MAXIMO.MAXOBJECT on MAXIMO.MAXTABLE.TABLENAME = MAXIMO.MAXOBJECT.OBJECTNAME where MAXTABLE.TABLENAME IN ($TABLES)
 									</div>
 								</div>
 
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelEG2" aria-expanded="false" aria-controls="collapseExample">e.g. LV</a>
 								<div class="collapse" id="tableLabelEG2">
 								  <div class="well well-sm">
-										SELECT systable.tableid AS Table_Name, singular AS Table_Label FROM systable join sdc on sdc.tableid = systable.tableid where systable.tableid IN (?)									</div>
+										SELECT systable.tableid AS Table_Name, singular AS Table_Label FROM systable join sdc on sdc.tableid = systable.tableid where systable.tableid IN ($TABLES)									</div>
 								</div>
 
 								<button type="button" id="tableLabelQuery" class="btn btn-default btn-xs" data-toggle="tooltip" title="Run query."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
@@ -750,19 +751,20 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
 								<div class="collapse" id="tableDescriptionSyntax">
 								  <div class="well well-sm">
-								    SELECT ... AS Table_Name, ... AS Table_Description FROM ... IN (?)
+								    SELECT ... AS Table_Name, ... AS Table_Description FROM ... IN ($TABLES)
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
 								<div class="collapse" id="tableDescriptionAboutParameter">
 								  <div class="well well-sm">
-								    (?) stand for a list of tables.
+								    ($TABLES) stand for a list of tables.
+									<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> <strong>Case is sensitive</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
 								<div class="collapse" id="tableDescriptionEG">
 								  <div class="well well-sm">
-								    <strong>SELECT</strong> table <strong>AS Table_Name,</strong> description <strong>AS Table_Description FROM</strong> tablelabels where table <strong>IN (?)</strong> and lang = 'en'
+								    <strong>SELECT</strong> table <strong>AS Table_Name,</strong> description <strong>AS Table_Description FROM</strong> tablelabels where table <strong>IN ($TABLES)</strong> and lang = 'en'
 										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
 								  </div>
 								</div>
@@ -770,14 +772,14 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionEG1" aria-expanded="false" aria-controls="collapseExample">e.g. MAXIMO</a>
 								<div class="collapse" id="tableDescriptionEG1">
 								  <div class="well well-sm">
-										SELECT MAXIMO.MAXTABLE.TABLENAME AS Table_Name, MAXIMO.MAXOBJECT.DESCRIPTION AS Table_Description FROM MAXIMO.MAXTABLE join MAXIMO.MAXOBJECT on MAXIMO.MAXTABLE.TABLENAME = MAXIMO.MAXOBJECT.OBJECTNAME where MAXTABLE.TABLENAME IN (?)
+										SELECT MAXIMO.MAXTABLE.TABLENAME AS Table_Name, MAXIMO.MAXOBJECT.DESCRIPTION AS Table_Description FROM MAXIMO.MAXTABLE join MAXIMO.MAXOBJECT on MAXIMO.MAXTABLE.TABLENAME = MAXIMO.MAXOBJECT.OBJECTNAME where MAXTABLE.TABLENAME IN ($TABLES)
 								  </div>
 								</div>
 
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionEG2" aria-expanded="false" aria-controls="collapseExample">e.g. LV</a>
 								<div class="collapse" id="tableDescriptionEG2">
 								  <div class="well well-sm">
-										SELECT systable.tableid AS Table_Name, tabledoc AS Table_Description FROM systable join sdc on sdc.tableid = systable.tableid where systable.tableid IN (?)
+										SELECT systable.tableid AS Table_Name, tabledoc AS Table_Description FROM systable join sdc on sdc.tableid = systable.tableid where systable.tableid IN ($TABLES)
 									</div>
 								</div>
 
@@ -792,20 +794,21 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
 								<div class="collapse" id="columnLabelSyntax">
 								  <div class="well well-sm">
-								    SELECT ... AS Table_Name, ... AS Column_Name, ... AS Column_Label FROM ... = ? ... IN (?)
+								    SELECT ... AS Table_Name, ... AS Column_Name, ... AS Column_Label FROM ... = $TABLE ... IN ($FIELDS)
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
 								<div class="collapse" id="columnLabelAboutParameter">
 								  <div class="well well-sm">
-										? stand for any table.<br>
-								    (?) stand for all fields of a table.
+										$TABLE stand for any table.<br>
+								    ($FIELDS) stand for all fields of a table.
+									<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> <strong>Case is sensitive</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
 								<div class="collapse" id="columnLabelEG">
 								  <div class="well well-sm">
-										<strong>SELECT</strong> table <strong>AS Table_Name,</strong> column <strong>AS Column_Name,</strong> label <strong>AS Column_Label FROM</strong> columnlabels where table <strong>= ?</strong> and column <strong>IN (?)</strong> and lang = 'en'
+										<strong>SELECT</strong> table <strong>AS Table_Name,</strong> column <strong>AS Column_Name,</strong> label <strong>AS Column_Label FROM</strong> columnlabels where table <strong>= $TABLE</strong> and column <strong>IN ($FIELDS)</strong> and lang = 'en'
 										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
 								  </div>
 								</div>
@@ -813,14 +816,14 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelEG1" aria-expanded="false" aria-controls="collapseExample">e.g. MAXIMO</a>
 								<div class="collapse" id="columnLabelEG1">
 								  <div class="well well-sm">
-										SELECT maxattribute.objectname AS Table_Name, maxattribute.attributeName AS Column_Name, maxattribute.title AS Column_Label FROM maxattribute where maxattribute.objectname = ? and maxattribute.attributeName IN (?)
+										SELECT maxattribute.objectname AS Table_Name, maxattribute.attributeName AS Column_Name, maxattribute.title AS Column_Label FROM maxattribute where maxattribute.objectname = $TABLE and maxattribute.attributeName IN ($FIELDS)
 								  </div>
 								</div>
 
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelEG2" aria-expanded="false" aria-controls="collapseExample">e.g. LV</a>
 								<div class="collapse" id="columnLabelEG2">
 								  <div class="well well-sm">
-										SELECT tableid AS Table_Name, columnid AS Column_Name, columnlabel AS Column_Label FROM syscolumn where tableid = ? and columnid IN (?)
+										SELECT tableid AS Table_Name, columnid AS Column_Name, columnlabel AS Column_Label FROM syscolumn where tableid = $TABLE and columnid IN ($FIELDS)
 								  </div>
 								</div>
 
@@ -835,20 +838,21 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
 								<div class="collapse" id="columnDescriptionSyntax">
 								  <div class="well well-sm">
-								    SELECT ... AS Table_Name, ... AS Column_Name, ... AS Column_Description FROM ... = ? ... IN (?)
+								    SELECT ... AS Table_Name, ... AS Column_Name, ... AS Column_Description FROM ... = $TABLE ... IN ($FIELDS)
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
 								<div class="collapse" id="columnDescriptionAboutParameter">
 								  <div class="well well-sm">
-										? stand for any table.<br>
-								    (?) stand for all fields of a table.
+										$TABLE stand for any table.<br>
+								    ($FIELDS) stand for all fields of a table.
+									<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> <strong>Case is sensitive</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
 								<div class="collapse" id="columnDescriptionEG">
 								  <div class="well well-sm">
-										<strong>SELECT</strong> table <strong>AS Table_Name,</strong> column <strong>AS Column_Name,</strong> description <strong>AS Column_Description FROM</strong> columnlabels where table <strong>= ?</strong> and column <strong>IN (?)</strong> and lang = 'en'
+										<strong>SELECT</strong> table <strong>AS Table_Name,</strong> column <strong>AS Column_Name,</strong> description <strong>AS Column_Description FROM</strong> columnlabels where table <strong>= $TABLE</strong> and column <strong>IN ($FIELDS)</strong> and lang = 'en'
 										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
 								  </div>
 								</div>
@@ -856,14 +860,14 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionEG1" aria-expanded="false" aria-controls="collapseExample">e.g. MAXIMO</a>
 								<div class="collapse" id="columnDescriptionEG1">
 								  <div class="well well-sm">
-										SELECT maxattribute.objectname AS Table_Name, maxattribute.attributeName AS Column_Name, maxattribute.remarks AS Column_Description FROM maxattribute where maxattribute.objectname = ? and maxattribute.attributeName IN (?)
+										SELECT maxattribute.objectname AS Table_Name, maxattribute.attributeName AS Column_Name, maxattribute.remarks AS Column_Description FROM maxattribute where maxattribute.objectname = $TABLE and maxattribute.attributeName IN ($FIELDS)
 								  </div>
 								</div>
 
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionEG2" aria-expanded="false" aria-controls="collapseExample">e.g. LV</a>
 								<div class="collapse" id="columnDescriptionEG2">
 								  <div class="well well-sm">
-										SELECT tableid AS Table_Name, columnid AS Column_Name, columndoc AS Column_Description FROM syscolumn where tableid = ? and columnid IN (?)
+										SELECT tableid AS Table_Name, columnid AS Column_Name, columndoc AS Column_Description FROM syscolumn where tableid = $TABLE and columnid IN ($FIELDS)
 								  </div>
 								</div>
 

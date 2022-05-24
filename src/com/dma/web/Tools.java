@@ -45,22 +45,33 @@ public class Tools {
 		query = query.toUpperCase();
 		
 		String clause = null;
-		if(!query.isEmpty() && StringUtils.countMatches(query, "(?)") == 1){
-			clause = StringUtils.substringBetween(query, " AND ", " IN (?)");
+        if(!query.isEmpty() && StringUtils.countMatches(query, "($TABLES)") == 1){
+            clause = StringUtils.substringBetween(query, " AND ", " IN ($TABLES)");
+            if(clause == null) {
+                    clause = StringUtils.substringBetween(query, " WHERE ", " IN ($TABLES)");
+            }
+        }
+		if(!query.isEmpty() && StringUtils.countMatches(query, " = $TABLE") == 1){
+			clause = StringUtils.substringBetween(query, " AND ", " = $TABLE");
 			if(clause == null) {
-				clause = StringUtils.substringBetween(query, " WHERE ", " IN (?)");
+				clause = StringUtils.substringBetween(query, " WHERE ", " = $TABLE");
 			}
 		}
-		if(!query.isEmpty() && StringUtils.countMatches(query, " = ?") == 1){
-			clause = StringUtils.substringBetween(query, " AND ", " = ?");
+        if(!query.isEmpty() && StringUtils.countMatches(query, "($FIELDS)") == 1){
+            clause = StringUtils.substringBetween(query, " AND ", " IN ($FIELDS)");
+            if(clause == null) {
+                    clause = StringUtils.substringBetween(query, " WHERE ", " IN ($FIELDS)");
+            }
+        }
+		if(!query.isEmpty() && StringUtils.countMatches(query, " = $FIELD") == 1){
+			clause = StringUtils.substringBetween(query, " AND ", " = $FIELD");
 			if(clause == null) {
-				clause = StringUtils.substringBetween(query, " WHERE ", " = ?");
+				clause = StringUtils.substringBetween(query, " WHERE ", " = $FIELDS");
 			}
 		}
 		
 		if(clause != null) {
 			clause = clause.trim();
-			System.out.println(clause);
 			
 			StringBuffer sb = new StringBuffer();
 			int i = 1;
