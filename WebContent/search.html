@@ -35,6 +35,7 @@
 		</button>
 		<ul class="dropdown-menu" id="BurgerMenu">
 			<li role="separator" class="divider"></li>
+			<li><a href="#" id="filter" onclick="GetDBMD()">Load DBMD</a></li>
 			<li><a href="#" id="filter" onclick="SaveDBMD()">Save DBMD</a></li>
 			<li><a href="#" id="unfilter" onclick="RemoveDBMD()">Remove DBMD</a></li>
 			<li role="separator" class="divider"></li>
@@ -221,6 +222,7 @@
 					</div>
 					<div class="modal-body">
 						<div id="queryModalAlert"></div>
+						<div id="modDivLoading"></div>
 						<form>
 		          <div class="form-group">
 								<div id="tableLabelAlert"></div>

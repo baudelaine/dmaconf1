@@ -1,8 +1,6 @@
 package com.dma.web;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -16,8 +14,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * Servlet implementation class GetImportedKeysServlet
@@ -59,6 +55,9 @@ public class RemoveDBMDServlet extends HttpServlet {
 			
 			Path prj = Paths.get((String) request.getSession().getAttribute("projectPath"));
 			result.put("PRJ", prj.toString());
+			
+			Map<String, DBMDTable> dbmd = new HashMap<String, DBMDTable>();
+			request.getSession().setAttribute("dbmd", dbmd);
 			
 			Path path = Paths.get(prj + "/dbmd.json");
 			File file = path.toFile();

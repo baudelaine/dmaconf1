@@ -5652,7 +5652,7 @@ function GetLabelsMultiLang(){
     return;
   }
 
-  $('#queryModal').modal('toggle');
+  // $('#queryModal').modal('toggle');
 
   var lang = $("#langSelect").find("option:selected").val();
   var parms = {};
@@ -6228,6 +6228,7 @@ $('#setHiddenINL').click(function(){
       }
       else{
         showalert("No Query Subject selected.", "Select a Query Subject first.", "alert-warning", "bottom");
+        $("#qsSelect").selectpicker("toggle");
       }
     }
   }
@@ -6278,6 +6279,7 @@ $("#setHidden").click(function(){
       }
       else{
         showalert("No Query Subject selected.", "Select a Query Subject first.", "alert-warning", "bottom");
+        $("#qsSelect").selectpicker("toggle");
       }
 
       console.log(currentProject);
@@ -6323,7 +6325,7 @@ function setHidden(){
 		}
 	});
 
-  $("#hiddenQueryModal").modal("toggle");
+  // $("#hiddenQueryModal").modal("toggle");
 
 }
 
