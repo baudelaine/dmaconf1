@@ -5415,7 +5415,7 @@ function GetCsvLabelsMultiLang(){
   var aliases = getArrayFromSet(aliasesSet);
 
   if(aliases.length == 0){
-    ShowAlert("Import at least one Query Subject to test.", "alert-warning", $("#csvLabelModalAlert"));
+    ShowAlert("Import at least one Query Subject.", "alert-warning", $("#csvLabelModalAlert"));
     return;
   }
 
@@ -5645,9 +5645,11 @@ function GetLabelsMultiLang(){
   var tables = getArrayFromSet(tablesSet);
 
   if(tables.length == 0){
-    ShowAlert("Import at least one Query Subject to test.", "alert-warning", $("#queryModalAlert"));
+    ShowAlert("Import at least one Query Subject.", "alert-warning", $("#queryModalAlert"));
     return;
   }
+
+  $('#queryModal').modal('toggle');
 
   var lang = $("#langSelect").find("option:selected").val();
   var parms = {};
@@ -5752,7 +5754,7 @@ function GetLabelsMultiLang(){
             })
           }
         })
-        $('#queryModal').modal('toggle');
+        // $('#queryModal').modal('toggle');
         $refTab.tab('show');
         $qsTab.tab('show');
       }
@@ -6147,24 +6149,24 @@ $("#updateModel").click(function(){
     success: function(data) {
         console.log(data);
 
-        // if(jQuery.isEmptyObject(data.DATAS)){
-        //   bootbox.alert({
-        //     message: "Model is already up to date.",
-        //     size: "small",
-        //     callback: function(result){
-        //     }
-        //   });          
+        if(jQuery.isEmptyObject(data.ADDED) && jQuery.isEmptyObject(data.REMOVED)){
+          bootbox.alert({
+            message: "Model is already up to date.",
+            size: "small",
+            callback: function(result){
+            }
+          });          
 
-        // }
-        // else{
+        }
+        else{
 
           $datasTable.bootstrapTable("load", data.MODEL);
           var list = '<ul class="list-group">';
           $.each(Object(data.ADDED), function(key, value){
-            list += '<li class="list-group-item">' + key + '<span class="badge"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true">' + value.length + '</span>' + '</li>';
+            list += '<li class="list-group-item">' + key + '<span class="badge badge-primary">+ ' + value.length + '</span></li>';
           })
           $.each(Object(data.REMOVED), function(key, value){
-            list += '<li class="list-group-item">' + key + '<span class="badge"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true">' + value.length + '</span>' + '</li>';
+            list += '<li class="list-group-item">' + key + '<span class="badge badge-warning">- ' + value.length + '</span></li>';
           })
           list += '</ul>';
 
@@ -6174,7 +6176,7 @@ $("#updateModel").click(function(){
             callback: function(result){
             }
           });  
-        // }        
+        }        
 
     },
     error: function(data) {

@@ -77,21 +77,21 @@ public class BuildTestQueryServlet extends HttpServlet {
 			
 				case "relation":
 
-					if(!query.isEmpty() && StringUtils.countMatches(query, " = ?") == 1){
-						query = StringUtils.replace(query, " = ?", " IN " + tableInClause);
+					if(!query.isEmpty() && StringUtils.countMatches(query, " = $TABLE") == 1){
+						query = StringUtils.replace(query, " = $TABLE", " IN " + tableInClause);
 					}
 					break;
 					
 				case "table": 
 					
-					if(!query.isEmpty() && StringUtils.countMatches(query, "(?)") == 1){
-						query = StringUtils.replace(query, "(?)", tableInClause);
+					if(!query.isEmpty() && StringUtils.countMatches(query, "($TABLES)") == 1){
+						query = StringUtils.replace(query, "($TABLES)", tableInClause);
 					}
 					break;
 					
 				case "column":
 					
-					if(!query.isEmpty() && StringUtils.countMatches(query, " (?)") == 1 && StringUtils.countMatches(query, " = ? ") == 1){
+					if(!query.isEmpty() && StringUtils.countMatches(query, " ($FIELDS)") == 1 && StringUtils.countMatches(query, " = $TABLE ") == 1){
 						List<String> fields = new ArrayList<String>();
 						
 						DatabaseMetaData metaData = con.getMetaData();
@@ -102,8 +102,8 @@ public class BuildTestQueryServlet extends HttpServlet {
 						rst.close();
 
 						String columnInClause = Tools.splitInClause(query, fields, 1000);
-						query = StringUtils.replace(query, " = ?", " = '" + tables.get(0) + "'");
-						query = StringUtils.replace(query, " (?)", " " + columnInClause);
+						query = StringUtils.replace(query, " = $TABLE", " = '" + tables.get(0) + "'");
+						query = StringUtils.replace(query, " ($FIELDS)", " " + columnInClause);
 
 					}
 					break;

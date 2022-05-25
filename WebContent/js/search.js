@@ -1196,9 +1196,9 @@ function GetCsvLabels(){
 }
 
 function GetLabels(){
-  $('#queryModal .collapse').each(function () {
-      $(this).collapse('hide');
-  });
+  // $('#queryModal .collapse').each(function () {
+  //     $(this).collapse('hide');
+  // });
 
   if(!CheckIfTableSelected()){
     return;
@@ -1214,6 +1214,8 @@ function GetLabels(){
   console.log(parms);
   // console.log(JSON.stringify(parms));
 
+  $('#queryModal').modal('toggle');
+
   $.ajax({
     type: 'POST',
     url: "GetLabels",
@@ -1223,6 +1225,7 @@ function GetLabels(){
     success: function(labels) {
       console.log(labels);
       if(labels.STATUS == "KO"){
+        $('#queryModal').modal('toggle');
         ShowAlert("ERROR: " + labels.MESSAGE + "<br>TROUBLESHOOTING: " + labels.TROUBLESHOOTING, "alert-danger", $("#queryModalAlert"));
       }
       else{
@@ -1230,7 +1233,6 @@ function GetLabels(){
         console.log(Object.values(dbmd));
         loadDBMD(Object.values(dbmd));
         // console.log(dbmd);
-        $('#queryModal').modal('toggle');
       }
 
     },

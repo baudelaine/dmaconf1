@@ -19,8 +19,8 @@
 	<link href="css/languages.min.css" type="text/css" rel="stylesheet">
 	<link href="css/mycss.css" type="text/css" rel="stylesheet" />
 
-	<!--
-	<a class="navbar-brand" href="https://data-accelerator.com/" target="_blank">
+	
+	<!-- <a class="navbar-brand" href="https://data-accelerator.com/" target="_blank">
 		<img alt="data-accelerator.com" src="img/cropped-logo-rond-192x192.png" height="35" style="vertical-align:bottom;margin:-15px 0px">
 	</a>
 
@@ -28,13 +28,27 @@
 
 	<ul class="navbar-form navbar-left" style="vertical-align:bottom;margin:-15px 20px">
 		<h3><span class="label label-primary" >Data Maximo Accelerator (DMA)</span></h3>
-	</ul>
-	-->
+	</ul> -->
+
+	<!-- <div class="input-group pull-right"> -->
+		<!-- <a class="navbar-brand" href="http://data-accelerator.com/" target="_blank">
+			<img alt="data-accelerator.com" src="img/logo.png" height="35" style="vertical-align:bottom;margin:-15px 0px">
+		</a> -->
+	<!-- </div> -->
+
+	
+	<!-- <div class="input-group pull-right" style=""> -->
+		<!-- <h4>
+			Data Maximo Accelerator
+		</h4> -->
+	<!-- </div> -->
+
 
 </head>
 <body>
 
-	<div class="container-fluid" style="margin-top: 10px;">
+
+	<div class="container-fluid" style="margin-top: 30px;">
 
 		<div id="alert_placeholder"></div>
 		<div id="divLoading"></div>
@@ -1140,26 +1154,27 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQuerySyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
 								<div class="collapse" id="relsQuerySyntax">
 								  <div class="well well-sm">
-								    SELECT ... as FK_NAME, ... as PK_NAME, ... as FKTABLE_NAME, ... as PKTABLE_NAME, ... as KEY_SEQ, ... as FKCOLUMN_NAME, ... as PKCOLUMN_NAME FROM .. = ?
+								    SELECT ... as FK_NAME, ... as PK_NAME, ... as FKTABLE_NAME, ... as PKTABLE_NAME, ... as KEY_SEQ, ... as FKCOLUMN_NAME, ... as PKCOLUMN_NAME FROM .. = $TABLE
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQueryAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
 								<div class="collapse" id="relsQueryAboutParameter">
 								  <div class="well well-sm">
-								    ? stand for any table.
+								    $TABLE stand for any table.
+									<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> <strong>Case is sensitive</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQueryFKEG0" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
 								<div class="collapse" id="relsQueryFKEG0">
 								  <div class="well well-sm">
-										<strong>SELECT</strong> fk_name <strong>as FK_NAME,</strong> pk_name <strong>as PK_NAME,</strong> fkTable_name <strong>as FKTABLE_NAME,</strong> pkTable_name <strong>as PKTABLE_NAME,</strong> key_seq <strong>as KEY_SEQ,</strong> fkColumn_name <strong>as FKCOLUMN_NAME,</strong> pkColumn_name <strong>as PKCOLUMN_NAME FROM</strong> relations WHERE fkTable_name <strong>= ?</strong>
+										<strong>SELECT</strong> fk_name <strong>as FK_NAME,</strong> pk_name <strong>as PK_NAME,</strong> fkTable_name <strong>as FKTABLE_NAME,</strong> pkTable_name <strong>as PKTABLE_NAME,</strong> key_seq <strong>as KEY_SEQ,</strong> fkColumn_name <strong>as FKCOLUMN_NAME,</strong> pkColumn_name <strong>as PKCOLUMN_NAME FROM</strong> relations WHERE fkTable_name <strong>= $TABLE</strong>
 										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQueryFKEG1" aria-expanded="false" aria-controls="collapseExample">e.g. MAXIMO</a>
 								<div class="collapse" id="relsQueryFKEG1">
 								  <div class="well well-sm">
-										SELECT 'FK_' || TARGETOBJ || '_' || OBJECTNAME || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as FK_NAME, 'PK_' || OBJECTNAME || '_' || TARGETOBJ || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as PK_NAME, TARGETOBJ as FKTABLE_NAME, OBJECTNAME as PKTABLE_NAME, KEYNUM as KEY_SEQ, TARGETKEY as FKCOLUMN_NAME, PARENTKEY as PKCOLUMN_NAME FROM LOGICALRELATIONSHIP join LRKEYS on LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID = LRKEYS.LOGICALRELATIONSHIPID WHERE TARGETOBJ = ?
+										SELECT 'FK_' || TARGETOBJ || '_' || OBJECTNAME || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as FK_NAME, 'PK_' || OBJECTNAME || '_' || TARGETOBJ || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as PK_NAME, TARGETOBJ as FKTABLE_NAME, OBJECTNAME as PKTABLE_NAME, KEYNUM as KEY_SEQ, TARGETKEY as FKCOLUMN_NAME, PARENTKEY as PKCOLUMN_NAME FROM LOGICALRELATIONSHIP join LRKEYS on LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID = LRKEYS.LOGICALRELATIONSHIPID WHERE TARGETOBJ = $TABLE
 								  </div>
 								</div>
 								<button type="button" id="runFKQuery" class="btn btn-default btn-xs" data-toggle="tooltip" title="Run query."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
@@ -1174,26 +1189,27 @@
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQuerySyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
 								<div class="collapse" id="relsQuerySyntax">
 								  <div class="well well-sm">
-								    SELECT ... as FK_NAME, ... as PK_NAME, ... as FKTABLE_NAME, ... as PKTABLE_NAME, ... as KEY_SEQ, ... as FKCOLUMN_NAME, ... as PKCOLUMN_NAME FROM .. = ?
+								    SELECT ... as FK_NAME, ... as PK_NAME, ... as FKTABLE_NAME, ... as PKTABLE_NAME, ... as KEY_SEQ, ... as FKCOLUMN_NAME, ... as PKCOLUMN_NAME FROM .. = $TABLE
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQueryAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
 								<div class="collapse" id="relsQueryAboutParameter">
 								  <div class="well well-sm">
-								    ? stand for any table.
+								    $TABLE stand for any table.
+									<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> <strong>Case is sensitive</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQueryPKEG0" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
 								<div class="collapse" id="relsQueryPKEG0">
 								  <div class="well well-sm">
-										<strong>SELECT</strong> fk_name <strong>as FK_NAME,</strong> pk_name <strong>as PK_NAME,</strong> fkTable_name <strong>as FKTABLE_NAME,</strong> pkTable_name <strong>as PKTABLE_NAME,</strong> key_seq <strong>as KEY_SEQ,</strong> fkColumn_name <strong>as FKCOLUMN_NAME,</strong> pkColumn_name <strong>as PKCOLUMN_NAME FROM</strong> relations WHERE pkTable_name <strong>= ?</strong>
+										<strong>SELECT</strong> fk_name <strong>as FK_NAME,</strong> pk_name <strong>as PK_NAME,</strong> fkTable_name <strong>as FKTABLE_NAME,</strong> pkTable_name <strong>as PKTABLE_NAME,</strong> key_seq <strong>as KEY_SEQ,</strong> fkColumn_name <strong>as FKCOLUMN_NAME,</strong> pkColumn_name <strong>as PKCOLUMN_NAME FROM</strong> relations WHERE pkTable_name <strong>= $TABLE</strong>
 										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
 								  </div>
 								</div>
 								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#relsQueryPKEG1" aria-expanded="false" aria-controls="collapseExample">e.g. MAXIMO</a>
 								<div class="collapse" id="relsQueryPKEG1">
 								  <div class="well well-sm">
-										SELECT 'FK_' || TARGETOBJ || '_' || OBJECTNAME || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as FK_NAME, 'PK_' || OBJECTNAME || '_' || TARGETOBJ || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as PK_NAME, TARGETOBJ as FKTABLE_NAME, OBJECTNAME as PKTABLE_NAME, KEYNUM as KEY_SEQ, TARGETKEY as FKCOLUMN_NAME, PARENTKEY as PKCOLUMN_NAME FROM LOGICALRELATIONSHIP join LRKEYS on LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID = LRKEYS.LOGICALRELATIONSHIPID WHERE OBJECTNAME = ?
+										SELECT 'FK_' || TARGETOBJ || '_' || OBJECTNAME || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as FK_NAME, 'PK_' || OBJECTNAME || '_' || TARGETOBJ || '_' || LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID as PK_NAME, TARGETOBJ as FKTABLE_NAME, OBJECTNAME as PKTABLE_NAME, KEYNUM as KEY_SEQ, TARGETKEY as FKCOLUMN_NAME, PARENTKEY as PKCOLUMN_NAME FROM LOGICALRELATIONSHIP join LRKEYS on LOGICALRELATIONSHIP.LOGICALRELATIONSHIPID = LRKEYS.LOGICALRELATIONSHIPID WHERE OBJECTNAME = $TABLE
 								  </div>
 								</div>
 								<button type="button" id="runPKQuery" class="btn btn-default btn-xs" data-toggle="tooltip" title="Run query."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
@@ -1263,6 +1279,8 @@
 			</div>
 
 		</div> -->
+
+
 		<div class="well well-sm">
 
 
@@ -1274,12 +1292,12 @@
 							<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
 					</button>
 					<ul class="dropdown-menu" id="mainMenu">
-						<li><a href="#" id="addFold">Add Folder</a></li>
-						<li><a href="#" id="removeFold">Remove Folder</a></li>
+						<!-- <li><a href="#" id="addFold">Add Folder</a></li> -->
+						<!-- <li><a href="#" id="removeFold">Remove Folder</a></li> -->
 						<!-- <li class="disabled"><a href="#" id="labelFold">Label Folder</a></li> -->
-						<li role="separator" class="divider"></li>
-						<li><a href="#" id="addDim">Add Dimension</a></li>
-						<li><a href="#" id="removeDim">Remove Dimension</a></li>
+						<!-- <li role="separator" class="divider"></li> -->
+						<!-- <li><a href="#" id="addDim">Add Dimension</a></li> -->
+						<!-- <li><a href="#" id="removeDim">Remove Dimension</a></li> -->
 						<!-- <li class="disabled"><a href="#" id="labelDim">Label Dimension</a></li> -->
 						<li role="separator" class="divider"></li>
 						<li><a href="#" id="ulActionLog">Upload Action Log</a></li>
@@ -1412,30 +1430,30 @@
 					</div>
 				</div>
 
-				<div class="input-group hidden" id="foldInputGroup">
+				<div class="input-group" id="foldInputGroup">
 					<div class="input-group-btn">
 						<select class="selectpicker" data-style="btn-default" id="foldSelect" data-live-search="true" title="Folders..."></select>
 						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 						</button>
 						<ul class="dropdown-menu" id="foldMenu">
 							<li><a href="#" id="addFold">Add</a></li>
 							<li><a href="#" id="removeFold">Remove</a></li>
-							<li class="disabled"><a href="#" id="labelFold">Label</a></li>
+							<li class="disabled hidden"><a href="#" id="labelFold">Label</a></li>
 						</ul>
 					</div>
 				</div>
 
-				<div class="input-group hidden" id="dimInputGroup">
+				<div class="input-group" id="dimInputGroup">
 					<div class="input-group-btn">
 						<select class="selectpicker" data-style="btn-default" id="dimSelect" data-live-search="true" title="Dimensions..."></select>
 						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 						</button>
 						<ul class="dropdown-menu" id="dimMenu">
 							<li><a href="#" id="addDim">Add</a></li>
 							<li><a href="#" id="removeDim">Remove</a></li>
-							<li class="disabled"><a href="#" id="labelDim">Label</a></li>
+							<li class="disabled hidden"><a href="#" id="labelDim">Label</a></li>
 						</ul>
 					</div>
 				</div>
@@ -1461,11 +1479,11 @@
 					</a>
 				</div>
 
-				<div class="input-group pull-right" style="">
+				<!-- <div class="input-group pull-right" style="">
 					<h4>
 						Data Maximo Accelerator
 					</h4>
-				</div>
+				</div> -->
 
 			</div>
 
