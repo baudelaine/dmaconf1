@@ -2830,7 +2830,8 @@ function buildFieldTable($el, cols, data, qs){
               case "addDimension":
 
                 if($('#dimSelect option').length == 1){
-                  showalert("", 'No dimension created yet. Create one clicking <strong>Add Dimension</strong> in the Main Menu <i class="glyphicon glyphicon-menu-hamburger"></i>.', "alert-warning", "bottom");
+                  showalert("", 'No dimension created yet.', "alert-warning", "bottom");
+                  $("#addDim").trigger('click');
                   return;
                 }
 
@@ -3671,7 +3672,9 @@ function buildTable($el, cols, data) {
           }
 
           if(field.match('folder') && $('#foldSelect option').length == 1){
-            showalert("", 'No folder created yet. Create one clicking <strong>Add Folder</strong> in the Main Menu <i class="glyphicon glyphicon-menu-hamburger"></i>.', "alert-warning", "bottom");
+            showalert("", 'No folder created yet.', "alert-warning", "bottom");
+            $("#addFold").trigger('click');
+            // $("#foldSelect").selectpicker('toggle');
             return;
           }
 

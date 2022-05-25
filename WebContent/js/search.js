@@ -94,7 +94,6 @@ $('#dynamicModal').on('shown.bs.modal', function(){
           list += '</script>';
           $('#dynamicModal').find('.modal-header').find('.modal-title').append(title);
           $('#dynamicModal').find('.modal-body').append(list);
-          console.log(list);
         }
         else {
           $.ajax({

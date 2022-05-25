@@ -130,23 +130,12 @@ public class GetNewRelationServlet extends HttpServlet {
 		    	    		
 		    	    	}
 		    	    	else {
-		    		    	if(label.length() <= 50) {
-		    		    		relation.setLabel(label);
-		    		    		relation.setDescription(desc);
-		    					if(!language.isEmpty()) {
-		    						relation.getLabels().put(language, label);
-		    						relation.getDescriptions().put(language, desc);
-		    					}
-		    		    		
-		    		    	}
-		    		    	else {
-		    		    		relation.setDescription(label);
-		    		    		relation.setLabel(label.substring(0, 50));
-		    					if(!language.isEmpty()) {
-		    						relation.getLabels().put(language, label.substring(0, 50));
-		    						relation.getDescriptions().put(language, label);
-		    					}
-		    		    	}
+	    		    		relation.setDescription(label);
+	    		    		relation.setLabel(label);
+	    					if(!language.isEmpty()) {
+	    						relation.getLabels().put(language, label);
+	    						relation.getDescriptions().put(language, label);
+	    					}
 		    	    	}
 		    			
 		    	    }

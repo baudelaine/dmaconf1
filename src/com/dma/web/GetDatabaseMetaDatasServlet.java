@@ -255,19 +255,9 @@ public class GetDatabaseMetaDatasServlet extends HttpServlet {
 			    	table.setTable_type(table_type);
 			    	table.setTable_remarks(table_remarks);
 			    	
-			    	if(table_remarks == null) {
-			    		table.setTable_remarks("");
-			    		table.setTable_description("");
-			    	}
-			    	else {
-			    		if(table_remarks.length() <= 50) {
-				    		table.setTable_remarks(table_remarks);
-				    		table.setTable_description("");
-			    		}
-			    		else {
-				    		table.setTable_remarks(table_remarks.substring(1, 50));
-				    		table.setTable_description(table_remarks);
-			    		}
+			    	if(table_remarks != null) {
+			    		table.setTable_remarks(table_remarks);
+			    		table.setTable_description(table_remarks);
 			    	}
 			    	
 			    	table.setTable_recCount(recCount);
@@ -292,18 +282,8 @@ public class GetDatabaseMetaDatasServlet extends HttpServlet {
 				    	field.setColumn_type(rst1.getString("TYPE_NAME"));
 				    	String column_remarks = rst1.getString("REMARKS");
 				    	if(column_remarks == null) {
-				    		field.setColumn_remarks("");
-					    	field.setColumn_description("");
-				    	}
-				    	else {
-					    	if(column_remarks.length() <= 50) {
-					    		field.setColumn_remarks(column_remarks);
-						    	field.setColumn_description("");
-					    	}
-					    	else {
-					    		field.setColumn_remarks(column_remarks.substring(1, 50));
-						    	field.setColumn_description(column_remarks);
-					    	}
+				    		field.setColumn_remarks(column_remarks);
+					    	field.setColumn_description(column_remarks);
 				    	}
 			        	field.setColumn_size(rst1.getInt("COLUMN_SIZE"));
 			        	if(pks.contains(rst1.getString("COLUMN_NAME"))){

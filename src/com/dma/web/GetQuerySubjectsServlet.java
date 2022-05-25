@@ -172,46 +172,6 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		String desc = "";
 		ResultSet rst = null;
 
-//		if(importLabel && qsFromXML == null) {
-//		
-////		    String[] types = {"TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM"};
-//		    String[] types = {"TABLE"}; 
-//		    		
-//		    if(project != null) {
-//			    String tableTypes = project.getResource().getTableTypes();
-//			    List<String> typesList = new ArrayList<String>();
-//			    switch(tableTypes.toUpperCase()) {
-//			    	case "TABLE":
-//			    		typesList.add("TABLE");
-//			    		break;
-//			    	case "VIEW":
-//			    		typesList.add("VIEW");
-//			    		break;
-//			    	case "BOTH":
-//			    		typesList.add("TABLE");
-//			    		typesList.add("VIEW");
-//			    		break;
-//			    }
-//			    types = typesList.stream().toArray(String[]::new);
-//		    }			
-//			
-//			rst = metaData.getTables(con.getCatalog(), schema, table, types);
-//			
-//			while (rst.next()) {
-//		    	label = rst.getString("REMARKS");
-//		    }
-//			
-//			if(rst != null){rst.close();}
-//			
-//			if(label == null) {label = "";}
-//			else {
-//		    	if(label.length() > 50) {
-//			    	desc = label;
-//		    		label = label.substring(0, 50);
-//		    	}
-//			}
-//		}
-
 		QuerySubject result = new QuerySubject();
 		
 		if(qsFromXML != null) {
@@ -432,21 +392,12 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		    		}
 		    	}
 		    	else {
-			    	if(column_remarks.length() <= 50) {
-			    		field.setLabel(column_remarks);
-			    		if(!language.isEmpty()) {
-		        			field.getLabels().put(language, column_remarks);
-		        			field.getDescriptions().put(language, "");
-			    		}
-			    	}
-			    	else {
-			    		field.setLabel(column_remarks.substring(0, 50));
-				    	field.setDescription(column_remarks);
-			    		if(!language.isEmpty()) {
-		        			field.getLabels().put(language, column_remarks.substring(0, 50));
-		        			field.getDescriptions().put(language, column_remarks);
-			    		}
-			    	}
+		    		field.setLabel(column_remarks);
+			    	field.setDescription(column_remarks);
+		    		if(!language.isEmpty()) {
+	        			field.getLabels().put(language, column_remarks);
+	        			field.getDescriptions().put(language, column_remarks);
+		    		}
 		    	}
         	}
         	
@@ -604,22 +555,12 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 				    		}
 		    	    	}
 		    	    	else {
-		    		    	if(label.length() <= 50) {
-		    		    		relation.setLabel(label);
-			    	    		relation.setDescription("");
-					    		if(!language.isEmpty()) {
-					    			relation.getLabels().put(language, label);
-					    			relation.getDescriptions().put(language, "");
-					    		}
-		    		    	}
-		    		    	else {
-		    			    	relation.setDescription(label);
-		    		    		relation.setLabel(label.substring(0, 50));
-					    		if(!language.isEmpty()) {
-					    			relation.getLabels().put(language, label.substring(0, 50));
-					    			relation.getDescriptions().put(language, label);
-					    		}
-		    		    	}
+	    			    	relation.setDescription(label);
+	    		    		relation.setLabel(label);
+				    		if(!language.isEmpty()) {
+				    			relation.getLabels().put(language, label);
+				    			relation.getDescriptions().put(language, label);
+				    		}
 		    	    	}
 		    	    	
 		    	    }

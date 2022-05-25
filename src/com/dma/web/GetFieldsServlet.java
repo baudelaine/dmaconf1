@@ -122,10 +122,8 @@ public class GetFieldsServlet extends HttpServlet {
 			    			field_remarks = "";
 			    		}
 			    		else {
-			    	    	if(field_remarks.length() > 50) {
-			    		    	field_desc = field_remarks;
-			    	    		field_remarks = field_remarks.substring(1, 50);
-			    	    	}
+		    		    	field_desc = field_remarks;
+		    	    		field_remarks = field_remarks;
 			    		}
 			        	
 			        	Field field = new Field();

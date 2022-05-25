@@ -5,7 +5,8 @@
 	<meta http-equiv="Expires" content="-1">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Data Maximo Accelarator (search)</title>
+	<link rel="shortcut icon" href="img/mini-logo.png"/>
+	<title>Data Maximo Accelarator (Search Tool)</title>
 	<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 	<link href="css/bootstrap-table.min.css" type="text/css" rel="stylesheet" />
 	<link href="css/bootstrap-editable.css" type="text/css" rel="stylesheet" />
@@ -22,46 +23,79 @@
 		<div id="divLoading"></div>
 		<div id="Alert"></div>
 
-    <div class="toolbar form-inline" id="searchToolbar">
-      <select class="selectpicker" id="searchSelect" multiple data-actions-box="true" data-live-search="true" title="Choose table(s)...">
-      </select>
 
-      <button type="button" onclick="SortOnStats()" class="btn btn-default" data-toggle="tooltip" title="Sort within stats."><span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span></button>
-			<button type="button" onclick="openDynamicModal()" class="btn btn-default" data-toggle="tooltip" title="Watch content."><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+		<div class="toolbar form-inline">
 
-			<select class="selectpicker" id="searchColumnSelect" multiple data-actions-box="true" data-live-search="true" title="Choose column(s)...">
-      </select>
+	<div class="well well-sm">
 
-      <button type="button" onclick="Filter()" class="btn btn-default" data-toggle="tooltip" title="Filter."><span class="glyphicon glyphicon-filter" aria-hidden="true"></span></button>
+		<div class="input-group">
+			<div class="input-group-btn">
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+		</button>
+		<ul class="dropdown-menu" id="BurgerMenu">
+			<li role="separator" class="divider"></li>
+			<li><a href="#" id="filter" onclick="SaveDBMD()">Save DBMD</a></li>
+			<li><a href="#" id="unfilter" onclick="RemoveDBMD()">Remove DBMD</a></li>
+			<li role="separator" class="divider"></li>
+			<li><a href="#" id="unfilter" onclick="window.close();">Close Tab</a></li>
+			<li role="separator" class="divider"></li>
+		</ul>
+	</div>
+</div>
 
-			<div class="input-group">
-				<div class="input-group-btn">
-					<!-- <button type="button" class="btn btn-default" data-toggle="tooltip" title="more..."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button> -->
-					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-toggle="tooltip" title="more...">
-						<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-					</button>
-					<ul class="dropdown-menu" id="langMenu">
-						<li><a href="#" id="addSqlLabel">Add SQL Labels</a></li>
-						<li><a href="#" id="addCsvLabel">Add CSV Labels</a></li>
-						<li><a href="#" id="removeDBMDLabels">Remove Labels</a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="#" id="addSqlRel">Add SQL Relations</a></li>
-						<li><a href="#" id="addCsvRel">Add CSV Relations</a></li>
-						<li><a href="#" id="removeRel">Remove Relations</a></li>
-					</ul>
+
+	<div class="input-group">
+		<div class="input-group-btn">
+		<select class="selectpicker" id="searchSelect" multiple data-actions-box="true" data-live-search="true" title="Tables...">
+		</select>
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-toggle="tooltip" title="more...">
+			<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+		</button>
+		<ul class="dropdown-menu" id="langMenu">
+			<li><a href="#" id="sortTables" onclick="SortOnStats()">Sort</a></li>
+			<li><a href="#" id="watchContent" onclick="openDynamicModal()">Watch content</a></li>
+			<li role="separator" class="divider"></li>
+
+			<li><a href="#" id="addSqlLabel">Add SQL Labels</a></li>
+			<li><a href="#" id="addCsvLabel">Add CSV Labels</a></li>
+			<li><a href="#" id="removeDBMDLabels">Remove Labels</a></li>
+			<li role="separator" class="divider"></li>
+			<li><a href="#" id="addSqlRel">Add SQL Relations</a></li>
+			<li><a href="#" id="addCsvRel">Add CSV Relations</a></li>
+			<li><a href="#" id="removeRel">Remove Relations</a></li>
+		</ul>
+</div>
+</div>
+
+
+				<div class="input-group">
+					<div class="input-group-btn">
+						<select class="selectpicker" id="searchColumnSelect" multiple data-actions-box="true" data-live-search="true" title="Columns...">
+						</select>
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-toggle="tooltip" title="more...">
+							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+						</button>
+						<ul class="dropdown-menu" id="langMenu">
+							<li role="separator" class="divider"></li>
+							<li><a href="#" id="filter" onclick="Filter()">Filter</a></li>
+							<li><a href="#" id="unfilter" onclick="location.reload();">Remove Filter</a></li>
+							<li role="separator" class="divider"></li>
+						</ul>
+					</div>
 				</div>
-			</div>
 
-			<button type="button" onclick="SaveDBMD()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Save database metadata to server."><span class="glyphicon glyphicon-save-file" aria-hidden="true"></span></button>
-			<button type="button" onclick="RemoveDBMD()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Remove database metadata to server."><span class="glyphicon glyphicon-erase" aria-hidden="true"></span></button>
-			<button type="button" onclick="location.reload();" class="btn btn-default" data-toggle="tooltip" title="Reload page."><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+				<div class="input-group pull-right">
+					<a class="navbar-brand" href="http://data-accelerator.com/" target="_blank">
+						<img alt="data-accelerator.com" src="img/logo.png" height="35" style="vertical-align:bottom;margin:-15px 0px">
+					</a>
+				</div>		
+				</div>
+	</div>
 
-    </div>
+	<table class="table table-striped fontsize" id="searchTable">
+	</table>
 
-
-		<table class="table table-striped fontsize" id="searchTable">
-
-		</table>
 
 		<!-- dynamic modal -->
 		<div class="modal fade" id="dynamicModal" tabindex="-1" role="dialog" aria-labelledby="dynamicModalLabel" data-keyboard="false" data-backdrop="static">
@@ -629,6 +663,8 @@
 			</div>
 		</div>
 		<!-- modelList modal -->
+
+		
 
 
 	</div> <!-- container -->
