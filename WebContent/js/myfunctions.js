@@ -564,10 +564,9 @@ $datasTable.on('resetrr-view.bs.table', function(){
       // console.log(row.fin);
 
       // Disable RepTableName if !ref
-      if(activeTab == "Reference" && !row.ref){
-        $tableRows.eq(i).find('a').eq(4).editable('disable');
-        // $tableRows.eq(i).find('a').editable('disable');
-      }
+      // if(activeTab == "Reference" && !row.ref){
+      //   $tableRows.eq(i).find('a').eq(4).editable('disable');
+      // }
       if(activeTab == "Security" && !row.sec){
         $tableRows.eq(i).find('a').eq(4).editable('disable');
         // $tableRows.eq(i).find('a').editable('disable');
@@ -3078,13 +3077,13 @@ function buildRelationTable($el, cols, data, qs){
 
           // Disable RepTableName if !ref or !sec
           // $tableRows.eq(i).find('a').eq(3) = RepTableName
-          if(activeTab.match("Reference|Security|Translation")){
-            if(!row.ref || !row.sec || !row.tra){
-              $tableRows.eq(i).find('a').eq(3).editable('disable');
-              // To disable all editables
-              // $tableRows.eq(i).find('a').editable('disable');
-            }
-          }
+          // if(activeTab.match("Reference|Security|Translation")){
+          //   if(!row.ref || !row.sec || !row.tra){
+          //     $tableRows.eq(i).find('a').eq(3).editable('disable');
+          //     // To disable all editables
+          //     // $tableRows.eq(i).find('a').editable('disable');
+          //   }
+          // }
 
           // disable table_alias if fin, ref, sec or tra checked
           // $tableRows.eq(i).find('a').eq(0) = table_alias
@@ -3149,22 +3148,22 @@ function buildRelationTable($el, cols, data, qs){
           case "nommageRep":
             var allowNommageRep = true;
 
-            if(!row.ref && activeTab.match("Reference")){
-              allowNommageRep = false;
-              showalert("buildRelationTable()", "Ref for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
-              return;
-            }
-            if(!row.sec && activeTab.match("Security")){
-              allowNommageRep = false;
-              showalert("buildRelationTable()", "Sec for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
-              return;
-            }
+            // if(!row.ref && activeTab.match("Reference")){
+            //   allowNommageRep = false;
+            //   showalert("buildRelationTable()", "Ref for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
+            //   return;
+            // }
+            // if(!row.sec && activeTab.match("Security")){
+            //   allowNommageRep = false;
+            //   showalert("buildRelationTable()", "Sec for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
+            //   return;
+            // }
 
-            if(!row.tra && activeTab.match("Translation")){
-              allowNommageRep = false;
-              showalert("buildRelationTable()", "Tra for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
-              return;
-            }
+            // if(!row.tra && activeTab.match("Translation")){
+            //   allowNommageRep = false;
+            //   showalert("buildRelationTable()", "Tra for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
+            //   return;
+            // }
 
             if(value == false){
               // interdire de cocher n fois pour un même pkAlias dans un qs donné
@@ -3180,10 +3179,6 @@ function buildRelationTable($el, cols, data, qs){
               });
 
             }
-            // if(!allowNommageRep){
-            //   showalert("buildRelationTable()", "RepTableName for pktable_alias " + row.pktable_alias + " already checked.", "alert-warning", "bottom");
-            //   return;
-            // }
             var newValue = value == false ? true : false;
             updateCell($el, row.index, field, newValue);
 
