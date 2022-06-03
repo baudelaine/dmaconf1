@@ -15,5 +15,45 @@
 15. Pouvoir exécuter les Hidden sur tous les QS en même temps en utilisant la query associée dans le Json
 16. Mettre un query par défaut dans les requete hidden (celle de l'exemple maximo)
 17. A la génération, proposer de télécharger l'action log ou le projet fini via une case à cocher.
+18. Download labels dans un fichier avec colonnes suivantes:
+TABLE_NAME;TABLE_ALIAS;TYPE;TABLE_LABEL
+
+
+12.
+Test with /home/fr054721/dmaconf/BDXMET-V0.8.2-2022-05-26-17-15-38.json
+Quand tu décoches l'EMPLACEMNT (WO_LOCATIONS( tu décoches une ref)) sur la table final WORKORDER, tu auras la table WO_LOCATIONS qui devra disparaître.
+Et lorsque tu décoches l'emplacement (ASSET_LOCATION (tu décoches une final)), sur la table final ASSET.
+-> Alors la table finale ASSET_LOCATION doit disparaitre ainsi que toutes les refs associées.
+cad:
+- LOCATION_GEO
+-LOCATION_BAT
+-LOCATION_ODT
+-WOANCESTOR_GEO
+-WOANCESTOR_BAT
+-WOANCESTOR_ODT
+-LOCHIERARCHY_GEO
+-LOCHIERARCHY_BAT
+-LOCHIERARCHY_ODT
+
+Onglet Ref -> WORKORDERFinal -> WO_LOCATIONSRef -> décoche Ref
+Résultat: Virer WO_LOCATIONSRef et BM_LOC_RESPRef
+Puis
+Onglet Final -> ASSETFinal -> ASSET_LOCATIONSFinal -> décoche Final
+Résultat: Dégager:
+SERVICEADDRESSRef
+LOCANCESTOR_GEORef
+LOCATIONSPECRef
+LOCANCESTOR_ODTRef
+LOCANCESTOR_BATRef
+ASSET_LOCATIONSFinal
+LOCHIERARCHY_GEORef
+LOCHIERARCHY_BATRef
+LOCHIERARCHY_ODTRef
+LOCATIONS_GEORef
+LOCATIONS_BATRef
+LOCATIONS_ODTRef
+HIERARCHY_GEO_VIEWRef
+
+LOCANCESTOR_GEORef, LOCANCESTOR_BATRef, LOCHIERARCHY_GEORef, LOCHIERARCHY_BATRef, LOCATIONS_GEORef, WO_LOCATIONSRef, BM_LOC_RESPRef, LOCANCESTOR_ODTRef, LOCATIONSPECRef, HIERARCHY_GEO_VIEWRef, ASSET_LOCATIONSFinal, LOCHIERARCHY_ODTRef, LOCATIONS_BATRef, WPMATERIALRef, LOCATIONS_ODTRef, SERVICEADDRESSRef
 
 

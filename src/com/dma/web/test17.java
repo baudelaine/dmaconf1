@@ -17,10 +17,10 @@ public class test17 {
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
 
-		Path path = Paths.get("/home/dma/dma/cda2/models/mdl1-migrated.json");
+		Path path = Paths.get("/home/fr054721/dmaconf/model-decoche.json");
 //		String selectedQs = "POFinal";
 //		String selectedQs = "POLINEFinal";
-		String selectedQs = "PERSONREF";
+		String selectedQs = "ASSETFinal";
 		
 		
 		
@@ -107,6 +107,9 @@ public class test17 {
 				else{
 					gDirNameCurrent = gDirName + "." + rel.getAbove();
 				}					
+
+				System.out.println(query_subject.get_id());
+				
 				if((pkAlias + "Ref").equalsIgnoreCase((selectedQs))) {
 					System.out.println("[REF].[" + qsFinalName + gDirNameCurrent + "]");
 					for(Field field: qss.get(pkAlias + "Ref").getFields()){

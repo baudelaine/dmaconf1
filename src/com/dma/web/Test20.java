@@ -16,10 +16,10 @@ public class Test20 {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
-		Path path = Paths.get("/home/dma/dma/cda2/models/cda-migrated.json");
+		Path path = Paths.get("/home/fr054721/dmaconf/model-decoche.json");
 //		String selectedQs = "POFinal";
 //		String selectedQs = "POLINEFinal";
-		String selectedQs = "ASSETFinal";
+		String selectedQs = "WO_LOCATIONSRef";
 //		String selectedQs = "PERSONRef";
 //		String selectedQs = "RFO_NIV3Ref";
 		
@@ -42,11 +42,11 @@ public class Test20 {
 		for(Entry<String, QuerySubject> qs: qss.entrySet()){
 			
 			
-			if (qs.getValue().get_id().equalsIgnoreCase(selectedQs)){
+//			if (qs.getValue().get_id().equalsIgnoreCase(selectedQs)){
 				
 				System.out.println(qs.getValue().get_id());
-				recurse(qs.getValue(), qss, "", selectedQs);
-			}
+				recurse(qs.getValue(), qss, "", "");
+//			}
 			
 		}
 	}
@@ -72,10 +72,14 @@ public class Test20 {
 					refDir = dir + "." + rel.getAbove();
 				}					
 				
-//				refDir = dir + "." + pkAlias;
-				System.out.println(selectedQs + refDir + "Ref");
-				qs = qss.get(rel.getPktable_alias() + "Ref");
-				recurse(qs, qss, refDir, selectedQs);
+
+//				if((pkAlias + "Ref").equalsIgnoreCase((selectedQs))) {
+					System.out.println(selectedQs + refDir + "Ref");
+					qs = qss.get(rel.getPktable_alias() + "Ref");
+					recurse(qs, qss, refDir, "");
+//				}
+				
+				refDir = dir + "." + pkAlias;
 			}
 
 		}

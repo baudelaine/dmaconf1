@@ -143,6 +143,7 @@ qsCols.push({field:"label", title: '<h4><span class="label label-default">Label<
 qsCols.push({field:"description", title: '<h4><span class="label label-default">Description<span>', sortable: false, editable: {type: "textarea", mode: "inline", rows: 4}});
 qsCols.push({field:"merge", title: '<h4><span class="label label-default">Merge<span>', sortable: false, editable: {type: "textarea", mode: "inline", rows: 2}});
 qsCols.push({field:"recCount", title: '<h4><span class="label label-default">Count(*)<span>', sortable: true});
+qsCols.push({field:"root", title: '<h4><span class="label label-default">Root<span>', formatter: "boolFormatter", align: "center"});
 qsCols.push({field:"recurseCount", title: '<i class="glyphicon glyphicon-repeat" title="Set recurse count"></i>', editable: {
     type: "select",
     mode: "inline",

@@ -33,6 +33,7 @@ public class QuerySubject {
 	Map<String, Filter> filters = new HashMap<String, Filter>(); 
 	String hiddenQuery = "SELECT $TABLE.$FIELD FROM $TABLE WHERE $TABLE.$FIELD IS NOT NULL AND $TABLE.$FIELD != '0'";
 	boolean tableExists = true;
+	boolean root = false;
 	
 	
 	public String getFolder() {
@@ -202,6 +203,12 @@ public class QuerySubject {
 	}
 	public void setTableExists(boolean tableExists) {
 		this.tableExists = tableExists;
+	}
+	public boolean isRoot() {
+		return root;
+	}
+	public void setRoot(boolean root) {
+		this.root = root;
 	}
 	
 }
