@@ -32,6 +32,7 @@ var selectedField;
 var selectedQS;
 var currentProject;
 var pKeys = {};
+
 // var currentLanguage;
 
 var countryCodes = ["ar", "be", "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "ga", "hi", "hr", "hu", "in", "is", "it", "iw", "ja", "ko", "lt", "lv", "mk", "ms", "mt", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh"];
@@ -359,6 +360,7 @@ $qsTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'linker');
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'remove');
+  $datasTable.bootstrapTable('hideColumn', 'root');
 
   // $("#foldInputGroup").hide().addClass('hidden');
   // $("#foldInputGroup").hide().addClass('show');
@@ -404,6 +406,7 @@ $viewTab.on('shown.bs.tab', function(e) {
   $('#ViewsTable').bootstrapTable('hideColumn', 'linker_ids');
   $('#ViewsTable').bootstrapTable('hideColumn', 'remove');
   $('#ViewsTable').bootstrapTable('hideColumn', 'recCount');
+  $('#ViewsTable').bootstrapTable('hideColumn', 'root');
 
   // $("#foldInputGroup").hide().addClass('hidden');
   // $("#foldInputGroup").hide().addClass('show');
@@ -443,6 +446,7 @@ $finTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'folder');
   $datasTable.bootstrapTable('showColumn', 'remove');
+  $datasTable.bootstrapTable('showColumn', 'root');
   $datasTable.show();
   $('#ViewsTable').hide();
 
@@ -475,6 +479,7 @@ $refTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'folder');
   $datasTable.bootstrapTable('hideColumn', 'remove');
+  $datasTable.bootstrapTable('hideColumn', 'root');
   $datasTable.show();
   $('#ViewsTable').hide();
 
@@ -505,6 +510,7 @@ $secTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'folder');
   $datasTable.bootstrapTable('hideColumn', 'linker');
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
+  $datasTable.bootstrapTable('hideColumn', 'root');
   $datasTable.show();
   $('#ViewsTable').hide();
 
@@ -527,6 +533,7 @@ $traTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'nommageRep');
   $datasTable.bootstrapTable('showColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'merge');
+  $datasTable.bootstrapTable('hideColumn', 'root');
   $datasTable.show();
   $('#ViewsTable').hide();
 
@@ -3252,9 +3259,17 @@ function buildRelationTable($el, cols, data, qs){
               showalert("buildSubTable()", "Empty is not a valid pktable_alias.", "alert-warning", "bottom");
               return;
             }
+
+
             var newValue = value == false ? true : false;
             var pkAlias = '[' + row.pktable_alias + ']';
             if(value == true){
+
+              var qssBackup = JSON.parse(JSON.stringify($datasTable.bootstrapTable("getData")));
+              updateCell($el, row.index, field, newValue);
+              UncheckQuerySubject(qssBackup);
+              return;
+
               PrepareRemoveKeys(row, qs);
               if(qs2rm.qsList.length > 0){
 
@@ -3290,6 +3305,7 @@ function buildRelationTable($el, cols, data, qs){
                 updateCell($datasTable, qs.index, "linker", linked);
 
               }
+
             }
             if(value == false){
 
@@ -3422,6 +3438,72 @@ $("#removeKeysModal").on('hidden.bs.modal', function (e) {
     }
   }
 })
+
+function UncheckQuerySubject(qssBackup){
+
+  console.log(qssBackup);
+
+  $datasTable.bootstrapTable("filterBy", {});
+  var qss = $datasTable.bootstrapTable("getData");
+  
+  console.log($datasTable.bootstrapTable("getData"));
+
+  var parms = {"qss": JSON.stringify(qss)};
+  console.log(parms);
+
+  $.ajax({
+    type: 'POST',
+    url: "UncheckQuerySubject",
+    dataType: 'json',
+    data: JSON.stringify(parms),
+
+    success: function(data) {
+      console.log(data);
+      if(data.DATAS != null){
+        var list = '<ul class="list-group">';
+        $.each(data.DATAS, function(i, qs){
+          list += '<li class="list-group-item">' + qs + '</li>';
+        });
+        list += '</ul>';
+
+        bootbox.confirm({
+          title: "Following Query Subject will be dropped: ",
+          message: list,
+          buttons: {
+            confirm: {
+              label: 'Drop',
+              className: 'btn btn-primary'
+          },
+          cancel: {
+                label: 'Cancel',
+                className: 'btn btn-default'
+            }
+          },
+          callback: function(result){
+            if(result){
+              console.log("OK Kate !");
+              $datasTable.bootstrapTable('remove', {
+                field: '_id',
+                values: data.DATAS
+              });
+      
+            }
+            else{
+              console.log("KO Kate !");
+              // updateCell($el, index, field, false);
+              $datasTable.bootstrapTable("load", qssBackup);
+            }
+          }
+        });        
+
+      }
+    },
+    error: function(data) {
+        console.log(data);
+    }
+  });
+
+}
 
 function PrepareRemoveKeys(o, qs){
 
@@ -3731,6 +3813,13 @@ function buildTable($el, cols, data) {
 
           if(field.match("addFolder")){
             AddNewFolder();
+          }
+
+          if(field.match("root")){
+            console.log("root was clicked !!!");
+            var newValue = value == false ? true : false;
+            updateCell($el, row.index, field, newValue);
+
           }
 
           if(field.match("addDimension")){
@@ -8070,7 +8159,7 @@ $("#ulModelFile").change(function(){
     contentType: false,   // tell jQuery not to set contentType
 		success: function(data) {
     console.log(data);
-      if(data.STATUS == "OK"){
+      if(data.STATUS == "OK" && data.DATAS != null){
         if(data.DATAS.querySubjects){
           console.log(data.DATAS.querySubjects);
           $datasTable.bootstrapTable("load", data.DATAS.querySubjects);

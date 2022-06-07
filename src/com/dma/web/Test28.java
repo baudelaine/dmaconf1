@@ -24,8 +24,8 @@ public class Test28 {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		Path path = Paths.get("/home/fr054721/dmaconf/model-decoche.json");
-		Path output = Paths.get("/home/fr054721/dmaconf/model-decoche-res.json");
+		Path path = Paths.get("/home/fr054721/dmaconf/mod1.json");
+		Path output = Paths.get("/home/fr054721/dmaconf/mod1-res.json");
 //		String selectedQs = "POFinal";
 //		String selectedQs = "POLINEFinal";
 //		String selectedQs = "ASSETFinal";
@@ -42,6 +42,7 @@ public class Test28 {
 		Map<String, QuerySubject> qss = new HashMap<String, QuerySubject>(); 
 		Set<String> qssRestant = new HashSet<String>();
 		Set<String> allQss = new HashSet<String>();
+		Set<String> qssToRemove = new HashSet<String>();
 		
 		for(QuerySubject qs: qssList) {
 			qss.put(qs.get_id(), qs);
@@ -53,35 +54,11 @@ public class Test28 {
 			
 			if (qs.getValue().getType().equalsIgnoreCase("Final")){
 				
-				String qsAlias = qs.getValue().getTable_alias();  // table de gauche, celle ou tu es actuellement
-				String gDirName = ""; // prefix qu'on cherche, il vaut cher
-				String qsFinalName = qs.getValue().getTable_alias();   //CONSTANTE, nom du QS final auquel l'arbre ref est accroché, le tronc, on peut le connaitre à tout moment de f1
-//				String table = qs.getValue().getTable_name();
-				String qSleftType = "Final";
-				
-				for(Relation rel: qs.getValue().getRelations()){
-					if(rel.isFin()) {
-						String pkAlias = rel.getPktable_alias();
-						System.out.println(pkAlias);
-					}
+				if(qs.getValue().isRoot()) {
+					System.out.println(qs.getValue().get_id());
+					qssRestant.add(qs.getValue().get_id());
+					recurseFinal(qs.getValue(), qssRestant, qss);
 				}
-				
-				Set<String> set = qs.getValue().getLinker_ids();
-				for (String s : set) {
-					if (s.equals("Root")) {
-						System.out.println(qs.getValue().get_id() + " ids : " + s);
-						qssRestant.add(qs.getValue().get_id());
-						recurseFinal(qs.getValue(), qssRestant, qss);
-					}
-				}				
-				
-				
-				
-
-				
-				
-//				recurse0(qsAlias, gDirName, qsFinalName, qSleftType, qss, recurseCount, qssLeft);
-				
 				
 			}
 			
@@ -89,25 +66,26 @@ public class Test28 {
 		System.out.println("***********************");
 		System.out.println(qssRestant);
 		System.out.println(qssRestant.size());
+		qssToRemove.addAll(allQss);
+		qssToRemove.removeAll(qssRestant);
 		System.out.println(allQss);
 		System.out.println(allQss.size());
-		allQss.removeAll(qssRestant);
-		System.out.println(allQss);
-		System.out.println(allQss.size());
-//		
-//		List<QuerySubject> querySubjects = new ArrayList<QuerySubject>();		
-//		List<QuerySubject> views  = new ArrayList<QuerySubject>();		
-//
-//		for(String id: qssLeft) {
-//			querySubjects.add(qss.get(id));
-//		}
-//		
-//		
-//		Map<String, List<QuerySubject>> content = new HashMap<String, List<QuerySubject>>();
-//		content.put("querySubjects", querySubjects);
-//		content.put("views", views);
-//		
-//		Files.write(output, Arrays.asList(Tools.toJSON(content)), StandardCharsets.UTF_8);		
+		System.out.println(qssToRemove);
+		System.out.println(qssToRemove.size());
+		
+		List<QuerySubject> querySubjects = new ArrayList<QuerySubject>();		
+		List<QuerySubject> views  = new ArrayList<QuerySubject>();		
+
+		for(String id: allQss) {
+			querySubjects.add(qss.get(id));
+		}
+		
+		
+		Map<String, List<QuerySubject>> content = new HashMap<String, List<QuerySubject>>();
+		content.put("querySubjects", querySubjects);
+		content.put("views", views);
+		
+		Files.write(output, Arrays.asList(Tools.toJSON(content)), StandardCharsets.UTF_8);		
 		
 	}
 	
@@ -118,14 +96,19 @@ public class Test28 {
 				qssRestant.add(pkAlias + "Final");
 				recurseFinal(qss.get(pkAlias + "Final"), qssRestant, qss);
 			}
+			Map<String, Integer> recurseCount = new HashMap<String, Integer>();
+			
+			for(Entry<String, QuerySubject> rcqs: qss.entrySet()){
+	        	recurseCount.put(rcqs.getValue().getTable_alias(), 0);
+	        }
 			if(rel.isRef()) { 
-				Map<String, Integer> recurseCount = new HashMap<String, Integer>();
-				
-				for(Entry<String, QuerySubject> rcqs: qss.entrySet()){
-		        	recurseCount.put(rcqs.getValue().getTable_alias(), 0);
-		        }
-				System.out.println(pkAlias + "" + qs.getType());
 				recurseRef(pkAlias, "Ref", qss, recurseCount, qssRestant);
+			}
+			if(rel.isSec()) { 
+				recurseRef(pkAlias, "Sec", qss, recurseCount, qssRestant);
+			}
+			if(rel.isTra()) { 
+				recurseRef(pkAlias, "Tra", qss, recurseCount, qssRestant);
 			}
 		}
 	}
@@ -156,18 +139,16 @@ public class Test28 {
 			String pkAlias = rel.getPktable_alias();
 			
 			if(rel.isRef()) { 
-		
-//				if(rel.getKey_type().equalsIgnoreCase("P") || rel.isNommageRep()){
-//					System.out.println(pkAlias + qSleftType);
-//					qss.get(pkAlias + qSleftType);
-//				}
-//				else{
-//					System.out.println(rel.getAbove() + qSleftType);
-//					qss.get(rel.getAbove() + qSleftType);
-//				}					
 				qssRestant.add(pkAlias + "Ref");
 				recurseRef(pkAlias, "Ref" ,qss, copyRecurseCount, qssRestant);	
-				
+			}
+			if(rel.isSec()) { 
+				qssRestant.add(pkAlias + "Sec");
+				recurseRef(pkAlias, "Sec" ,qss, copyRecurseCount, qssRestant);	
+			}
+			if(rel.isTra()) { 
+				qssRestant.add(pkAlias + "Tra");
+				recurseRef(pkAlias, "Tra" ,qss, copyRecurseCount, qssRestant);	
 			}
 		}
 		
