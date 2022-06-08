@@ -3973,6 +3973,7 @@ function GetNewField($el) {
 
           success: function(data) {
             console.log(data);
+            data._id = fieldName.toUpperCase();
             data.field_name = fieldName.toUpperCase();
             data.custom = true;
             var currentLanguage = $('#langSelect').find("option:selected").val();
@@ -3982,7 +3983,7 @@ function GetNewField($el) {
             if(activeTab.match("View")){
               data.role = "Folder"
             }
-            data.fieldPos = nextIndex;
+            data.fieldPos = nextIndex + 1;
             AddRow($el, data);
           },
           error: function(data) {

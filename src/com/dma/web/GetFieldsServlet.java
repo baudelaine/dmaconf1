@@ -135,7 +135,7 @@ public class GetFieldsServlet extends HttpServlet {
 		        			field.getLabels().put(language, field_remarks);
 		        			field.getDescriptions().put(language, field_desc);
 		        		}
-			        	field.set_id(field_name + field_type);
+			        	field.set_id(field_name);
 			        	if(pks.contains(rst.getString("COLUMN_NAME"))){
 			    			field.setPk(true);
 			    		}

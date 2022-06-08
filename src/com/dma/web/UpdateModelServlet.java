@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,20 +76,36 @@ public class UpdateModelServlet extends HttpServlet {
 				List<String> langs = (List<String>) Tools.fromJSON((String) parms.get("langs"), new TypeReference<List<String>>(){});
 				
 				@SuppressWarnings("unchecked")
-				List<QuerySubject> model = (List<QuerySubject>) Tools.fromJSON((String) parms.get("model"), new TypeReference<List<QuerySubject>>(){});
+				List<QuerySubject> qss = (List<QuerySubject>) Tools.fromJSON((String) parms.get("model"), new TypeReference<List<QuerySubject>>(){});
 
-				Map<String, Map<String, Object>> tMap = new HashMap<String, Map<String, Object>>();
+				Map<String, List<Field>> fieldsToRemove = new HashMap<String, List<Field>>();
+				Map<String, List<Field>> fieldsToAdd = new HashMap<String, List<Field>>();
+				Map<String, List<Field>> fieldsToUpdate = new HashMap<String, List<Field>>();
+				Map<String, List<Field>> customFields = new HashMap<String, List<Field>>();
 				
-				for(QuerySubject qs: model) {
+				Map<String, Map<String, Field>> modelMap = new HashMap<String, Map<String, Field>>();
+				Map<String, Map<String, Field>> dbMap = new HashMap<String, Map<String, Field>>();
+				Map<String, Integer> colCountMap = new HashMap<String, Integer>();
+				
+				// Start build modelMap and put custom fields in customFields
+				for(QuerySubject qs: qss) {
 					String table = qs.getTable_name();
 					List<Field> fields = qs.getFields();
-					Map<String, Object> fMap = new HashMap<String, Object>();
+					Map<String, Field> fMap = new HashMap<String, Field>();
+					List<Field> customFList = new ArrayList<Field>();
 					for(Field field: fields) {
 						String fieldName = field.getField_name();
-						fMap.put(fieldName, null);
+						if(!field.isCustom()) {
+							fMap.put(fieldName, field);
+						}
+						else {
+							customFList.add(field);					
+						}
 					}
-					tMap.put(table, fMap);
+					modelMap.put(table, fMap);
+					customFields.put(table, customFList);
 				}
+				// End build modelMap and put custom fields in customFields
 
 				boolean isXML = false;
 				Project project = (Project) request.getSession().getAttribute("currentProject");
@@ -99,26 +116,25 @@ public class UpdateModelServlet extends HttpServlet {
 					}
 				}
 
-				Map<String, List<Field>> newFields = new HashMap<String, List<Field>>();
-				Map<String, List<Field>> fieldsToRemove = new HashMap<String, List<Field>>();
 				
 				if(isXML) {
 					@SuppressWarnings("unchecked")
-					Map<String, QuerySubject> qss = (Map<String, QuerySubject>) request.getSession().getAttribute("QSFromXML");
+					Map<String, QuerySubject> qssXML = (Map<String, QuerySubject>) request.getSession().getAttribute("QSFromXML");
+					Map<String, List<Field>> newFields = new HashMap<String, List<Field>>();
 					
-					for(Entry<String, QuerySubject> qs: qss.entrySet()) {
+					for(Entry<String, QuerySubject> qs: qssXML.entrySet()) {
 						String table = qs.getKey();
-						if(tMap.containsKey(table)){
+						if(modelMap.containsKey(table)){
 							List<Field> fields = qs.getValue().getFields();
 							for(Field field: fields) {
-								if(!tMap.get(table).containsKey(field.getField_name())) {
+								if(!modelMap.get(table).containsKey(field.getField_name())) {
 	
 									if(!newFields.containsKey(table)) {
 										newFields.put(table, new ArrayList<Field>());
 									}
 									
 									Field newField = new Field();
-									newField.set_id(field.getField_name() + field.getField_type());
+									newField.set_id(field.getField_name());
 									newField.setField_name(field.getField_name());
 									newField.setField_type(field.getField_type());
 									Map<String, String> langsMap = new HashMap<String, String>();
@@ -137,10 +153,10 @@ public class UpdateModelServlet extends HttpServlet {
 				else {
 
 					// Add fields in QS if new in DB table
-					Connection con = (Connection) request.getSession().getAttribute("con");
+					Connection conn = (Connection) request.getSession().getAttribute("con");
 					String schema = (String) request.getSession().getAttribute("schema");
 					
-				    DatabaseMetaData metaData = con.getMetaData();
+				    DatabaseMetaData metaData = conn.getMetaData();
 				    
 //				    String[] types = {"TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM"};
 				    String[] types = {"TABLE"}; 
@@ -163,118 +179,120 @@ public class UpdateModelServlet extends HttpServlet {
 					    types = typesList.stream().toArray(String[]::new);
 				    }				    
 				    
-				    ResultSet rstTables = metaData.getTables(con.getCatalog(), schema, "%", types);					    
-
+					// Start build dbMap and colCountMap
+				    ResultSet rstTables = metaData.getTables(conn.getCatalog(), schema, "%", types);					    
 				    while (rstTables.next()) {
 				    	String table = rstTables.getString("TABLE_NAME");
-				    	if(tMap.containsKey(table)) {
-							ResultSet rstFields = metaData.getColumns(con.getCatalog(), schema, rstTables.getString("TABLE_NAME"), "%");
+				    	if(modelMap.containsKey(table)) {
+					    	System.out.println(table);
+							ResultSet rstFields = metaData.getColumns(conn.getCatalog(), schema, table, "%");
+							ResultSetMetaData rsmd = rstTables.getMetaData();
+							colCountMap.put(table, rsmd.getColumnCount());
+							Map<String, Field> fMap = new HashMap<String, Field>();
 							while(rstFields.next()){
-								if(!tMap.get(table).containsKey(rstFields.getString("COLUMN_NAME"))) {								
-
-									if(!newFields.containsKey(table)) {
-										newFields.put(table, new ArrayList<Field>());
-									}
-									
-									Field newField = new Field();
-									newField.set_id(rstFields.getString("COLUMN_NAME") + rstFields.getString("TYPE_NAME"));
-									newField.setField_name(rstFields.getString("COLUMN_NAME"));
-									newField.setField_type(rstFields.getString("TYPE_NAME"));
-									newField.setNullable(rstFields.getString("IS_NULLABLE"));
-									newField.setField_size(rstFields.getInt("COLUMN_SIZE"));
-									newField.setDescription(rstFields.getString("REMARKS"));
-									Map<String, String> langsMap = new HashMap<String, String>();
-									for(String lang: langs) {
-										langsMap.put(lang, "");
-									}
-									newField.setLabels(langsMap);
-									newField.setDescriptions(langsMap);
-									
-									newFields.get(table).add(newField);
+								Field field = new Field();
+								String column = rstFields.getString("COLUMN_NAME");
+								System.out.println(column);
+								field.set_id(rstFields.getString("COLUMN_NAME"));
+								field.setField_name(rstFields.getString("COLUMN_NAME"));
+								field.setField_type(rstFields.getString("TYPE_NAME"));
+								field.setNullable(rstFields.getString("IS_NULLABLE"));
+								field.setField_size(rstFields.getInt("COLUMN_SIZE"));
+								field.setDescription(rstFields.getString("REMARKS"));
+								field.setFieldPos(rstFields.getInt("ORDINAL_POSITION"));
+								Map<String, String> langsMap = new HashMap<String, String>();
+								for(String lang: langs) {
+									langsMap.put(lang, "");
 								}
-								
+								field.setLabels(langsMap);
+								field.setDescriptions(langsMap);
+								fMap.put(column, field);
 							}
+							dbMap.put(table, fMap);
 							rstFields.close();
 				    	}
-
-				    }		    
-				    
+				    }
 				    rstTables.close();
+					// End build dbMap and colCountMap
 				    
-				    // Remove fields from QS if no longer exists in DB table and not custom
-				    // set tableExists to true in QS  if DB table no longer exists
+				    System.out.println(modelMap);
+				    System.out.println(dbMap);
 				    
-					Map<String, Set<String>> fldMap = new HashMap<String, Set<String>>();
-					Set<String> tblSet = new HashSet<String>();
+				    // Start Update ORDINAL_POSITION (fieldPos) of existing field in model and put fields that does not exists in db in fieldsToRemove 
+				    for(Entry<String, Map<String, Field>> model: modelMap.entrySet()) {
+				    	String modelTable = model.getKey();
+				    	Map<String, Field> modelFieldsMap = model.getValue();
+			    		List<Field> fieldsToRemoveList = new ArrayList<Field>();
+			    		List<Field> fieldsToUpdateList = new ArrayList<Field>();
+				    	for(Entry<String, Field> field: modelFieldsMap.entrySet()) {
+				    		String modelColumn = field.getKey();
+				    		Field modelField = field.getValue();
+					    	if(dbMap.get(modelTable).get(modelColumn) != null) {
+					    		int dbFieldPos = dbMap.get(modelTable).get(modelColumn).getFieldPos();
+					    		modelField.setFieldPos(dbFieldPos);
+					    		fieldsToUpdateList.add(modelField);
+					    		System.out.println(modelColumn + " exists in DB (" + modelField.getFieldPos() + ")");
+					    	}
+					    	else {
+					    		System.out.println(modelColumn + " DOES NOT exists in DB");
+					    		fieldsToRemoveList.add(modelField);
+					    	}
+				    	}
+			    		fieldsToRemove.put(modelTable, fieldsToRemoveList);
+			    		fieldsToUpdate.put(modelTable, fieldsToUpdateList);
+				    }
+				    // End Update ORDINAL_POSITION (fieldPos) of existing field in model and put fields that does not exists in db in fieldsToRemove 
+				    
+				    // Start Adding field in db that does not exists in model in fieldsToAdd
+				    for(Entry<String, Map<String, Field>> db: dbMap.entrySet()) {
+				    	String dbTable = db.getKey();
+				    	Map<String, Field> dbFieldsMap = db.getValue();
+				    	List<Field> fieldsToAddList = new ArrayList<Field>();
+				    	for(Entry<String, Field> field: dbFieldsMap.entrySet()) {
+				    		String dbColumn = field.getKey();
+				    		Field dbField = field.getValue();
+				    		if(modelMap.get(dbTable).get(dbColumn) == null) {
+				    			fieldsToAddList.add(dbField);
+					    		System.out.println(dbColumn + " DOES NOT exists in model (" + dbField.getFieldPos() + ")");
+				    		}
+				    	}
+				    	fieldsToAdd.put(dbTable, fieldsToAddList);
+				    }
+				    // End Adding field in db that does not exists in model in fieldsToAdd
+				    
+				    
+				    
+				    System.out.println(modelMap);
+				    System.out.println(dbMap);
+				    System.out.println(fieldsToRemove);
+				    System.out.println(fieldsToAdd);
+				    System.out.println(fieldsToUpdate);
+				    System.out.println(customFields);
+				    
+					for(QuerySubject qs: qss) {
+						List<Field> fields = new ArrayList<Field>();
+						fields.addAll(fieldsToUpdate.get(qs.getTable_name()));
+						fields.addAll(fieldsToAdd.get(qs.getTable_name()));
+						int fieldPos = colCountMap.get(qs.getTable_name());
+						System.out.println(qs.getTable_name());
+						System.out.println(fieldPos);
+						for(Field customField: customFields.get(qs.getTable_name())) {
+							customField.setFieldPos(fieldPos++);
+							fields.add(customField);
+						}
+						qs.setFields(fields);
+					}
+
+				    System.out.println(qss.size());
+				    
+
 					
-					for(QuerySubject qs: model) {
-						String table = qs.getTable_name();
-						tblSet.add(table);
-					}
-				    
-					for(String tbl: tblSet) {
-						
-						ResultSet rstFields = metaData.getColumns(con.getCatalog(), schema, tbl, "%");
-						Set<String> fldSet = new HashSet<String>();
-						while(rstFields.next()){
-							fldSet.add(rstFields.getString("COLUMN_NAME"));
-						}
-						rstFields.close();
-						if(fldSet.size() > 0) {
-							fldMap.put(tbl, fldSet);
-						}
-					}
-				    
-					for(QuerySubject qs: model) {
-						if(!tblSet.contains(qs.getTable_name())) {
-//							System.out.println(qs.getTable_name() + " does not exists");
-							qs.setTableExists(false);
-						}
-						else {
-							Set<String> fldSet = fldMap.get(qs.getTable_name());
-							List<Field> fldToRemove = new ArrayList<Field>();
-							for(Field fld: qs.getFields()) {
-								if(!fldSet.contains(fld.getField_name())) {
-//									System.out.println(qs.getTable_name() + "." + fld.getField_name() + " does not exists");
-									if(!fld.isCustom()) {
-										fldToRemove.add(fld);
-									}
-								}
-							}
-							if(fldToRemove.size() > 0) {
-								fieldsToRemove.put(qs.get_id(), fldToRemove);
-							}
-						}
-					}
-					
 				}
 				
-				Map<String, List<Field>> fldsToAdd = new HashMap<String, List<Field>>();
 				
-				for(QuerySubject qs: model) {
-					String table = qs.getTable_name();
-					if(newFields.containsKey(table)) {
-						fldsToAdd.put(qs.get_id(), newFields.get(table));
-						qs.getFields().addAll(newFields.get(table));
-					}
-					if(fieldsToRemove.containsKey(qs.get_id())) {
-						List<Field> fldsToRemove = fieldsToRemove.get(qs.get_id());
-//						datas.remove(qs.get_id(), fldsToRemove);
-						qs.getFields().removeAll(fldsToRemove);
-					}
-				}
-				
-				for(QuerySubject qs: model) {
-					List<Field> fields = qs.getFields();
-					int fieldPos = 0;
-					for(Field field: fields) {
-						field.setFieldPos(fieldPos++);
-					}
-				}
-				
-				result.put("MODEL", model);
+				result.put("MODEL", qss);
 				result.put("REMOVED", fieldsToRemove);
-				result.put("ADDED", fldsToAdd);
+				result.put("ADDED", fieldsToAdd);
 				result.put("STATUS", "OK");
 			}
 			else {

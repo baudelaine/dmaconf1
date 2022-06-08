@@ -377,7 +377,7 @@ public class GetQuerySubjectsServlet extends HttpServlet {
         	field.setField_type(field_type);
         	field.setLabel("");
         	field.setDescription("");
-        	field.setFieldPos(fieldPos++);
+        	field.setFieldPos(rst.getInt("ORDINAL_POSITION"));
         	
         	if(importLabel) {
 	        	field.setLabel(rst.getString("REMARKS"));
@@ -403,7 +403,7 @@ public class GetQuerySubjectsServlet extends HttpServlet {
         	
         	field.setField_size(rst.getInt("COLUMN_SIZE"));
         	field.setNullable(rst.getString("IS_NULLABLE"));
-        	field.set_id(field_name + field_type);
+        	field.set_id(field_name);
         	if(pks.contains(rst.getString("COLUMN_NAME"))){
     			field.setPk(true);
     			field.setIcon("Identifier");
