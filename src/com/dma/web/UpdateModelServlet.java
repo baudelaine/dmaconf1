@@ -238,8 +238,12 @@ public class UpdateModelServlet extends HttpServlet {
 					    		fieldsToRemoveList.add(modelField);
 					    	}
 				    	}
-			    		fieldsToRemove.put(modelTable, fieldsToRemoveList);
-			    		fieldsToUpdate.put(modelTable, fieldsToUpdateList);
+				    	if(!fieldsToRemoveList.isEmpty()) {
+				    		fieldsToRemove.put(modelTable, fieldsToRemoveList);
+				    	}
+				    	if(!fieldsToUpdateList.isEmpty()) {
+				    		fieldsToUpdate.put(modelTable, fieldsToUpdateList);
+				    	}
 				    }
 				    // End Update ORDINAL_POSITION (fieldPos) of existing field in model and put fields that does not exists in db in fieldsToRemove 
 				    
@@ -256,7 +260,9 @@ public class UpdateModelServlet extends HttpServlet {
 					    		System.out.println(dbColumn + " DOES NOT exists in model (" + dbField.getFieldPos() + ")");
 				    		}
 				    	}
-				    	fieldsToAdd.put(dbTable, fieldsToAddList);
+				    	if(!fieldsToAddList.isEmpty()) {
+				    		fieldsToAdd.put(dbTable, fieldsToAddList);
+				    	}
 				    }
 				    // End Adding field in db that does not exists in model in fieldsToAdd
 				    
@@ -271,14 +277,20 @@ public class UpdateModelServlet extends HttpServlet {
 				    
 					for(QuerySubject qs: qss) {
 						List<Field> fields = new ArrayList<Field>();
-						fields.addAll(fieldsToUpdate.get(qs.getTable_name()));
-						fields.addAll(fieldsToAdd.get(qs.getTable_name()));
+						if(fieldsToUpdate.get(qs.getTable_name()) != null) {
+							fields.addAll(fieldsToUpdate.get(qs.getTable_name()));
+						}
+						if(fieldsToAdd.get(qs.getTable_name()) != null) {
+							fields.addAll(fieldsToAdd.get(qs.getTable_name()));
+						}
 						int fieldPos = colCountMap.get(qs.getTable_name());
 						System.out.println(qs.getTable_name());
 						System.out.println(fieldPos);
-						for(Field customField: customFields.get(qs.getTable_name())) {
-							customField.setFieldPos(fieldPos++);
-							fields.add(customField);
+						if(customFields.get(qs.getTable_name()) != null) {
+							for(Field customField: customFields.get(qs.getTable_name())) {
+								customField.setFieldPos(fieldPos++);
+								fields.add(customField);
+							}
 						}
 						qs.setFields(fields);
 					}

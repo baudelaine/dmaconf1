@@ -178,7 +178,7 @@ public class Test29 {
 		}
 
 	    System.out.println(qss.size());
-		
+	    System.out.println(colCountMap);		
 	}
 
 }
