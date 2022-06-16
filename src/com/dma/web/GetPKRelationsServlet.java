@@ -379,6 +379,10 @@ public class GetPKRelationsServlet extends HttpServlet {
 			            	System.out.println(e.getMessage());
 			            	
 			            }
+//			            catch(NumberFormatException nfe) {
+//			            	System.out.println("CATCHING NumberFormatException...");
+//			            	System.out.println(nfe.getMessage());
+//			            }
 			            finally {
 				            if (stm != null) { stm.close();}
 				            if(rst != null){rst.close();}

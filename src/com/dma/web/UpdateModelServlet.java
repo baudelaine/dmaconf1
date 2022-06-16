@@ -231,10 +231,10 @@ public class UpdateModelServlet extends HttpServlet {
 					    		int dbFieldPos = dbMap.get(modelTable).get(modelColumn).getFieldPos();
 					    		modelField.setFieldPos(dbFieldPos);
 					    		fieldsToUpdateList.add(modelField);
-					    		System.out.println(modelColumn + " exists in DB (" + modelField.getFieldPos() + ")");
+//					    		System.out.println(modelColumn + " exists in DB (" + modelField.getFieldPos() + ")");
 					    	}
 					    	else {
-					    		System.out.println(modelColumn + " DOES NOT exists in DB");
+//					    		System.out.println(modelColumn + " DOES NOT exists in DB");
 					    		fieldsToRemoveList.add(modelField);
 					    	}
 				    	}
@@ -257,7 +257,7 @@ public class UpdateModelServlet extends HttpServlet {
 				    		Field dbField = field.getValue();
 				    		if(modelMap.get(dbTable).get(dbColumn) == null) {
 				    			fieldsToAddList.add(dbField);
-					    		System.out.println(dbColumn + " DOES NOT exists in model (" + dbField.getFieldPos() + ")");
+//					    		System.out.println(dbColumn + " DOES NOT exists in model (" + dbField.getFieldPos() + ")");
 				    		}
 				    	}
 				    	if(!fieldsToAddList.isEmpty()) {
@@ -268,12 +268,12 @@ public class UpdateModelServlet extends HttpServlet {
 				    
 				    
 				    
-				    System.out.println(modelMap);
-				    System.out.println(dbMap);
-				    System.out.println(fieldsToRemove);
-				    System.out.println(fieldsToAdd);
-				    System.out.println(fieldsToUpdate);
-				    System.out.println(customFields);
+//				    System.out.println(modelMap);
+//				    System.out.println(dbMap);
+//				    System.out.println(fieldsToRemove);
+//				    System.out.println(fieldsToAdd);
+//				    System.out.println(fieldsToUpdate);
+//				    System.out.println(customFields);
 				    
 					for(QuerySubject qs: qss) {
 						List<Field> fields = new ArrayList<Field>();
@@ -284,8 +284,8 @@ public class UpdateModelServlet extends HttpServlet {
 							fields.addAll(fieldsToAdd.get(qs.getTable_name()));
 						}
 						int fieldPos = colCountMap.get(qs.getTable_name());
-						System.out.println(qs.getTable_name());
-						System.out.println(fieldPos);
+//						System.out.println(qs.getTable_name());
+//						System.out.println(fieldPos);
 						if(customFields.get(qs.getTable_name()) != null) {
 							for(Field customField: customFields.get(qs.getTable_name())) {
 								customField.setFieldPos(fieldPos++);
@@ -294,13 +294,7 @@ public class UpdateModelServlet extends HttpServlet {
 						}
 						qs.setFields(fields);
 					}
-
-				    System.out.println(qss.size());
-				    
-
-					
 				}
-				
 				
 				result.put("MODEL", qss);
 				result.put("REMOVED", fieldsToRemove);

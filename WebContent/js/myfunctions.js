@@ -5905,6 +5905,84 @@ function OpenQueries(id){
 
 }
 
+$("#ulXMLModel").click(function(){
+  console.log("ulXMLModel was clicked");
+  $('#ulXMLModelFile').trigger('click');
+
+})
+
+$('#ulXMLModelFile').change(function(){
+  var file = $(this)[0].files[0];
+  console.log(file);
+
+  var fd = new FormData();
+  fd.append('file', file, 'model.xml');
+  console.log(fd);
+
+  $.ajax({
+    url: "UploadXMLModel",
+    type: "POST",
+    data: fd,
+    enctype: 'multipart/form-data',
+    // dataType: 'application/text',
+    processData: false,  // tell jQuery not to process the data
+    contentType: false,   // tell jQuery not to set contentType
+    success: function(data) {
+      console.log(data);
+        if(data.STATUS == "OK"){
+          showalert(data.FROM, data.MESSAGE, "alert-success", "bottom");
+        }
+        else{
+          showalert(data.FROM, data.MESSAGE, "alert-danger", "bottom");
+        }
+		},
+		error: function(data) {
+      console.log(data);
+		}
+  });
+
+  $(this).val('');  
+
+})
+
+saveLabels.addEventListener('click', function(event){
+
+  var qss = $datasTable.bootstrapTable("getData");
+
+  if(qss.length == 0){
+    showalert("Nothing to do", "No Query Subjects found.", "alert-info", "bottom");
+    return;
+  }
+
+  var lang = $("#langSelect").find("option:selected").val();
+
+  var parms = {"qss": JSON.stringify(qss), "delim": ";", "lang": lang}
+
+  console.log(parms);
+
+  $.ajax({
+    type: 'POST',
+    url: "SaveQssLabels",
+    dataType: 'json',
+    data: JSON.stringify(parms),
+
+    success: function(data) {
+      console.log(data);
+      if(data.STATUS == "OK"){
+        showalert(data.FROM, data.MESSAGE, "alert-success", "bottom");
+        window.location.href = "DLLabels";
+      }
+      else{
+        showalert(data.FROM, data.MESSAGE, "alert-warning", "bottom");
+      }
+    },
+    error: function(data) {
+      console.log(data);
+    }
+  });
+  
+  event.preventDefault();
+}, false);
 
 $('#XMLFile').change(function(){
   var file = $(this)[0].files[0];
