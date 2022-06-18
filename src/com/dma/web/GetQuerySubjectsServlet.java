@@ -366,7 +366,7 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 	        }
         }
 		
-        int fieldPos = 0;
+//        int fieldPos = 0;
         
         while (rst.next()) {
         	String field_name = rst.getString("COLUMN_NAME");
@@ -462,8 +462,11 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 			relationMode = "CSV";
 		}
 		else if(FKQuery != null && !FKQuery.isEmpty()) {
+//			System.out.println("FKQuery=" + FKQuery);
+			FKQuery = StringUtils.replace(FKQuery, " $TABLE", " '" + table + "'");
+//			System.out.println("FKQuery=" + FKQuery);
 			stmt = con.prepareStatement(FKQuery);
-			stmt.setString(1, table);
+//			stmt.setString(1, table);
     		rst = stmt.executeQuery();
 			relationMode = "SQL";
     	}

@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Servlet implementation class AppendSelectionsServlet
  */
@@ -136,8 +138,9 @@ public class SaveRelationsServlet extends HttpServlet {
 					result.put("FKS", "CSV");
 				}
 				else if(FKQuery != null && !FKQuery.isEmpty()) {
+					FKQuery = StringUtils.replace(FKQuery, " $TABLE", " '" + table + "'");
 					stmt = con.prepareStatement(FKQuery);
-					stmt.setString(1, table);
+//					stmt.setString(1, table);
 		    		rst = stmt.executeQuery();
 					result.put("FKS", "SQL");
 		    	}

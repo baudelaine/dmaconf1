@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
@@ -123,8 +125,9 @@ public class GetDatabaseMetaDatasServlet extends HttpServlet {
 					result.put("FKS", "CSV");
 				}
 				else if(FKQuery != null && !FKQuery.isEmpty()) {
+					FKQuery = StringUtils.replace(FKQuery, " $TABLE", " '" + table_name + "'");
 					stmt = con.prepareStatement(FKQuery);
-					stmt.setString(1, table_name);
+//					stmt.setString(1, table_name);
 		    		rst = stmt.executeQuery();
 					result.put("FKS", "SQL");
 		    	}
@@ -165,8 +168,9 @@ public class GetDatabaseMetaDatasServlet extends HttpServlet {
 					result.put("PKS", "CSV");
 				}
 				else if(PKQuery != null && !PKQuery.isEmpty()) {
+					PKQuery = StringUtils.replace(PKQuery, " $TABLE", " '" + table_name + "'");
 					stmt = con.prepareStatement(PKQuery);
-					stmt.setString(1, table_name);
+//					stmt.setString(1, table_name);
 		    		rst = stmt.executeQuery();
 					result.put("PKS", "SQL");
 		    	}
