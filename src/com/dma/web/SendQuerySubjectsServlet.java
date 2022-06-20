@@ -592,15 +592,21 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 			
 			String qSIDStart = "";
 			for(Entry<String, QuerySubject> query_subject: query_subjects.entrySet()){
-				Set<String> set = query_subject.getValue().getLinker_ids();
-				for (String s : set) {
-					if (s.equals("Root")) {
-						qSIDStart = query_subject.getValue().get_id();
-						System.out.println(query_subject.getValue().get_id() + " ids : " + s);
-						createMeasures("", qSIDStart, true, measures);
-//							System.out.println("MeasureMap : " + measures.toString());
-					}
+				
+				if(query_subject.getValue().isRoot()) {
+					qSIDStart = query_subject.getValue().get_id();
+					System.out.println(query_subject.getValue().get_id() + " ids : Root");
+					createMeasures("", qSIDStart, true, measures);
 				}
+//				Set<String> set = query_subject.getValue().getLinker_ids();
+//				for (String s : set) {
+//					if (s.equals("Root")) {
+//						qSIDStart = query_subject.getValue().get_id();
+//						System.out.println(query_subject.getValue().get_id() + " ids : " + s);
+//						createMeasures("", qSIDStart, true, measures);
+//							System.out.println("MeasureMap : " + measures.toString());
+//					}
+//				}
 			}
 
 			Map<String, Map<String, String>> dimensions = new HashMap<String, Map<String, String>>();
