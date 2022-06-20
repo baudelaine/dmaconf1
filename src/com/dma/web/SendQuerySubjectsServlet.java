@@ -818,10 +818,11 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 //				fsvc.createPackage(modelName, modelName, modelName, locales);
 //				fsvc.publishPackage(modelName,"/content");
 			
-			String actLog = null;
+//			String actLog = null;
 			
 			try {
-				actLog = csvc.executeAllActions();
+//				actLog = csvc.executeAllActions();
+				csvc.executeAllActions();
 			}
 			catch(Exception e) {
 				result.put("STATUS", "KO");
@@ -838,11 +839,11 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 			result.put("STATUS", "OK");
 			result.put("MESSAGE", projectName + " published sucessfully.");
             // START Write action log file to server  
-			prj = Paths.get((String) request.getSession().getAttribute("projectPath"));
-			Path dlDir = Paths.get(prj + "/downloads");
-			Path actLogFile = Paths.get(dlDir + "/actLog.xml");
-			Files.write(actLogFile, actLog.getBytes());
-			actLogFile.toFile().setReadable(true, false);
+//			prj = Paths.get((String) request.getSession().getAttribute("projectPath"));
+//			Path dlDir = Paths.get(prj + "/downloads");
+//			Path actLogFile = Paths.get(dlDir + "/actLog.xml");
+//			Files.write(actLogFile, actLog.getBytes());
+//			actLogFile.toFile().setReadable(true, false);
             // END Write action log file to server  
 			
 		}
