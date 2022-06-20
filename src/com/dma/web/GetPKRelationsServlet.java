@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Servlet implementation class GetTablesServlet
  */
@@ -123,8 +125,9 @@ public class GetPKRelationsServlet extends HttpServlet {
 				result.put("MODE", "CSV");
 			}
 			else if(PKQuery != null && !PKQuery.isEmpty()) {
+				PKQuery = StringUtils.replace(PKQuery, " $TABLE", " '" + table + "'");
 				stmt = con.prepareStatement(PKQuery);
-				stmt.setString(1, table);
+//				stmt.setString(1, table);
 	    		rst = stmt.executeQuery();
 				result.put("MODE", "SQL");
 	    	}
