@@ -208,7 +208,15 @@ public class GetPKRelationsServlet extends HttpServlet {
 						    }
 						    types = typesList.stream().toArray(String[]::new);
 					    }			        	
-			        	
+			        	System.out.println("con=" + con);
+			        	System.out.println("con.getCatalog()=" + con.getCatalog());
+			        	System.out.println("schema=" + schema);
+			        	System.out.println("fktable_name=" + fktable_name);
+			        	System.out.println("types=" + types);
+			        	System.out.println("metaData=" + metaData);
+			        	if(metaData == null) {
+							metaData = con.getMetaData();
+			        	}
 			        	rst0 = metaData.getTables(con.getCatalog(), schema, fktable_name, types);
 			    		String label = "";
 			    		String desc = "";
