@@ -3268,7 +3268,24 @@ function buildRelationTable($el, cols, data, qs){
               var qssBackup = JSON.parse(JSON.stringify($datasTable.bootstrapTable("getData")));
               updateCell($el, row.index, field, newValue);
               UncheckQuerySubject(qssBackup);
-              return;
+              if(activeTab == "Final"){
+                row.relationship = row.relationship.split("[FINAL]." + pkAlias).join(pkAlias);
+                row.fin = false;
+              }
+              if(activeTab == "Reference"){
+                row.relationship = row.relationship.split("[REF]." + pkAlias).join(pkAlias);
+                row.ref = false;
+              }
+              if(activeTab == "Security"){
+                row.relationship = row.relationship.split("[SEC]." + pkAlias).join(pkAlias);
+                row.sec = false;
+              }
+
+              if(activeTab == "Translation"){
+                row.relationship = row.relationship.split("[TRA]." + pkAlias).join(pkAlias);
+                row.tra = false;
+              }
+            return;
 
               PrepareRemoveKeys(row, qs);
               if(qs2rm.qsList.length > 0){
@@ -3459,7 +3476,7 @@ function UncheckQuerySubject(qssBackup){
 
     success: function(data) {
       console.log(data);
-      if(data.DATAS != null){
+      if(data.DATAS != null && data.DATAS.length > 0){
         var list = '<ul class="list-group">';
         $.each(data.DATAS, function(i, qs){
           list += '<li class="list-group-item">' + qs + '</li>';
@@ -4112,6 +4129,21 @@ function GetPKRelations(table_name, table_alias, type){
   });
 
 }
+
+$("#watchContent").click(function(){
+  var table_name = $tableList.find("option:selected").val();
+  if(!table_name == ""){
+  var query = "select * from " + table_name;
+  console.log(query);
+  var parms = {query: query};
+  localStorage.setItem('SQLQuery', JSON.stringify(parms));
+  window.open("watchContent.html");
+  }
+  else{
+    showalert("No Table selected.", "Select a table first.", "alert-warning", "bottom");
+    $("#tables").selectpicker("toggle");
+  }
+})
 
 $("#addPK").click(function(){
 	var pks = ($("#PKList").val());
