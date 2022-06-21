@@ -100,13 +100,14 @@ public class GetDatabaseMetaDatasServlet extends HttpServlet {
 			    }
 			    types = typesList.stream().toArray(String[]::new);
 		    }
-		    
+		    System.out.println("types=" + types);
 		    ResultSet rst0 = metaData.getTables(con.getCatalog(), schema, "%", types);	
 
 		    
 		    while (rst0.next()) {
 
 		    	String table_name = rst0.getString("TABLE_NAME");
+		    	System.out.println("table_name=" + table_name);
 		    	
 		    	ResultSet rst = null;
 		    	PreparedStatement stmt = null;

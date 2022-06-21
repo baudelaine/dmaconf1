@@ -671,8 +671,8 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		    		double d0 = Double.parseDouble(String.valueOf(recCount));
 		    		double d1 = Double.parseDouble(String.valueOf(qs_recCount));
 		    		
-		    		System.out.println("recCount=" + recCount);
-		    		System.out.println("qs_recCount=" + qs_recCount);
+//		    		System.out.println("recCount=" + recCount);
+//		    		System.out.println("qs_recCount=" + qs_recCount);
 		    		
 		    		double num = (d0/d1) * 100;
 		    		System.out.println("num=" + num);
