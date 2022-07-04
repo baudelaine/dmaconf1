@@ -99,7 +99,7 @@ public class GetTablesServlet extends HttpServlet {
 			    
 			    while (rst.next()) {
 			    	tables.put(rst.getString("TABLE_NAME"), rst.getString("TABLE_TYPE"));
-			    	System.out.println(rst.getString("TABLE_NAME") + " - " + rst.getString("TABLE_TYPE"));
+//			    	System.out.println(rst.getString("TABLE_NAME") + " - " + rst.getString("TABLE_TYPE"));
 			    }		    
 			    result.put("TABLES", tables);
 			    
