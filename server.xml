@@ -12,12 +12,16 @@
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint host="*" httpPort="80" httpsPort="443" id="defaultHttpEndpoint"/>
 
+        <httpSession cookieHttpOnly="false" cookieName="JSESSIONID" invalidationTimeout="8h" invalidateOnUnauthorizedSessionRequestException="false"/>
+<!--
+<httpSession invalidationTimeout="8h" invalidateOnUnauthorizedSessionRequestException="false"/>
+<ltpa expiration="1440"/> 
+-->
+<webAppSecurity logoutOnHttpSessionExpire="true" />
+
 	<!-- Automatically expand WAR files and EAR files -->
 	<applicationManager autoExpand="true"/>
 
-	<!--
-	<quickStartSecurity userName="fram" userPassword="fram" />
-	-->
 
        <ldapRegistry
                 id="sample_ldap" realm="SampleLdapIDSRealm" ignoreCase="true"
@@ -53,6 +57,21 @@
 	  <properties.oracle databaseName="lvso112" driverType="thin" password="danone" portNumber="1521" serverName="172.16.186.243" user="danone"/>
 	</dataSource>
 
+	<dataSource jndiName="jdbc/lvso112.COGNOS" transactional="false" cognosCatalog="" cognosDataSource="DEV" cognosSchema="COGNOS">
+	  <jdbcDriver libraryRef="ORALib"/>
+	  <properties.oracle databaseName="lvso112" driverType="thin" password="cognos" portNumber="1521" serverName="172.16.186.240" user="cognos"/>
+	</dataSource>
+
+	<dataSource jndiName="jdbc/maximo.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="JDBCAVIATION" cognosSchema="MAXIMO">
+	  <jdbcDriver libraryRef="ORALib"/>
+	  <properties.oracle databaseName="maximo" driverType="thin" password="maximo" portNumber="1521" serverName="172.16.186.251" user="maximo"/>
+	</dataSource>
+
+	<dataSource jndiName="jdbc/orcl.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="BDXMET" cognosSchema="MAXIMO" tableTypes="BOTH">
+	  <jdbcDriver libraryRef="ORALib"/>
+	  <properties.oracle databaseName="orcl" driverType="thin" password="spcspc" portNumber="1521" serverName="172.16.186.238" user="maximo"/>
+	</dataSource>
+
 	<dataSource jndiName="jdbc/XE.HR" transactional="false" cognosCatalog="CCAT" cognosDataSource="CDS" cognosSchema="CSCH">
 	  <jdbcDriver libraryRef="ORALib"/>
 	  <properties.oracle databaseName="XE" driverType="thin" password="spcspc" portNumber="1521" serverName="172.16.186.241" user="HR"/>
@@ -68,12 +87,32 @@
     <fileset dir="${shared.resource.dir}/DB2" includes="*.jar"/>
   </library>
 
-  <dataSource jndiName="jdbc/FRMARK.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="FRMARK" cognosSchema="DB2INST1">
+  <dataSource jndiName="jdbc/ANDROS.VENTES" transactional="false" cognosCatalog="" cognosDataSource="VENTES_MONDE" cognosSchema="VENTES" tableTypes="BOTH">
     <jdbcDriver libraryRef="DB2Lib"/>
-    <properties.db2.jcc databaseName="FRMARK" password="spcspc" portNumber="50000" serverName="172.16.186.151" user="db2inst1"/>
+    <properties.db2.jcc databaseName="ANDROS" password="spcspc" portNumber="50000" serverName="172.16.186.252" user="db2inst1"/>
   </dataSource>
 
-  <dataSource jndiName="jdbc/SAMPLE.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="DB2Sample" cognosSchema="DB2INST1">
+ <dataSource jndiName="jdbc/ANDROS.WP_DEMO" transactional="false" cognosCatalog="" cognosDataSource="WP_DEMO" cognosSchema="WP_DEMO" tableTypes="TABLE">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="ANDROS" password="spcspc" portNumber="50000" serverName="172.16.186.252" user="db2inst1"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/FRMARK.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="FRMARK" cognosSchema="DB2INST1">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="FRMARK" password="spcspc" portNumber="50000" serverName="172.16.186.242" user="db2inst1"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/ORIGONE.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="ORIGONE" cognosSchema="DB2INST1">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="ORIGONE" password="spcspc" portNumber="50000" serverName="172.16.186.242" user="db2inst1"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/AUDIT.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="AUDIT" cognosSchema="DB2INST1">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="AUDIT" password="spcspc" portNumber="50000" serverName="172.16.186.242" user="db2inst1"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/SAMPLE.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="DB2Sample" cognosSchema="DB2INST1"  tableTypes="BOTH">
     <jdbcDriver libraryRef="DB2Lib"/>
     <properties.db2.jcc databaseName="SAMPLE" password="spcspc" portNumber="50000" serverName="172.16.186.242" user="db2inst1"/>
   </dataSource>
@@ -82,6 +121,46 @@
     <jdbcDriver libraryRef="DB2Lib"/>
     <properties.db2.jcc databaseName="MAXDB76" password="spcspc" portNumber="50000" serverName="172.16.186.241" user="db2admin"/>
   </dataSource>
+
+  <dataSource jndiName="jdbc/ENNOVIA.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="ENNOVIA" cognosSchema="MAXIMO" tableTypes="BOTH">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="ENNOVIA" password="spcspc" portNumber="50000" serverName="172.16.186.241" user="db2admin"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/ENNOVIALX.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="ENNOVIA" cognosSchema="MAXIMO" tableTypes="BOTH">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="ENNOVIA" password="spcspc" portNumber="50000" serverName="172.16.186.81" user="db2inst1"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/CDA.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="CDA" cognosSchema="MAXIMO">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="CDA" password="spcspc" portNumber="50000" serverName="172.16.186.241" user="db2admin"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/SAMPLE.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="MAXIMOSample" cognosSchema="MAXIMO">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="MAXDB76" password="spcspc" portNumber="50000" serverName="172.16.186.247" user="db2admin"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/COCOA.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="Cocoa" cognosSchema="DB2INST1">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="COCOA" password="spcspc" portNumber="50000" serverName="172.16.186.242" user="db2inst1"/>
+  </dataSource>
+
+        <dataSource jndiName="jdbc/CDA4.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="CDA4" cognosSchema="MAXIMO" tableTypes="TABLE">
+        <jdbcDriver libraryRef="DB2Lib"/>
+        <properties.db2.jcc databaseName="CDA4" password="spcspc" portNumber="50000" serverName="172.16.186.241" user="db2admin"/>
+        </dataSource>
+
+        <dataSource jndiName="jdbc/DGAC.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="DGAC" cognosSchema="MAXIMO" tableTypes="TABLE">
+        <jdbcDriver libraryRef="DB2Lib"/>
+        <properties.db2.jcc databaseName="DGAC" password="spcspc" portNumber="50000" serverName="172.16.186.250" user="db2admin"/>
+        </dataSource>
+
+        <dataSource jndiName="jdbc/CDABREST.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="CDABREST" cognosSchema="MAXIMO" tableTypes="TABLE">
+        <jdbcDriver libraryRef="DB2Lib"/>
+        <properties.db2.jcc databaseName="CDABREST" password="spcspc" portNumber="50000" serverName="172.16.186.241" user="db2admin"/>
+        </dataSource>
 
   <jndiEntry jndiName="TestDB2Connection" value="select current date from sysibm.sysdummy1"/>
 
@@ -143,9 +222,29 @@
     <fileset dir="${shared.resource.dir}/PGSQL" includes="*.jar"/>
   </library>
 
-  <dataSource jndiName="jdbc/dvdrental.public" type="javax.sql.XADataSource" cognosCatalog="" cognosDataSource="PGSample" cognosSchema="dvdrental">
+  <dataSource jndiName="jdbc/dvdrental.public" type="javax.sql.XADataSource" cognosCatalog="" cognosDataSource="PGSample" cognosSchema="public">
     <jdbcDriver libraryRef="PGSQLLib" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"/>
     <properties databaseName="dvdrental" password="spcspc" portNumber="5432" serverName="172.16.186.242" user="postgres"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/edl202207.public" type="javax.sql.XADataSource" cognosCatalog="" cognosDataSource="PGgecko-edl" cognosSchema="public" tableTypes="BOTH">
+    <jdbcDriver libraryRef="PGSQLLib" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"/>
+    <properties databaseName="edl202207" password="spcspc" portNumber="5432" serverName="172.16.186.242" user="postgres"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/gecko-edl.public" type="javax.sql.XADataSource" cognosCatalog="" cognosDataSource="PGgecko-edl" cognosSchema="public" tableTypes="BOTH">
+    <jdbcDriver libraryRef="PGSQLLib" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"/>
+    <properties databaseName="gecko-edl" password="spcspc" portNumber="5432" serverName="172.16.186.242" user="postgres"/>
+  </dataSource>
+
+ <dataSource jndiName="jdbc/foodmart.public" type="javax.sql.XADataSource" cognosCatalog="" cognosDataSource="PGfoodmart" cognosSchema="public">
+    <jdbcDriver libraryRef="PGSQLLib" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"/>
+    <properties databaseName="foodmart" password="spcspc" portNumber="5432" serverName="172.16.186.248" user="postgres"/>
+  </dataSource>
+
+ <dataSource jndiName="jdbc/sugarcrm.public" type="javax.sql.XADataSource" cognosCatalog="" cognosDataSource="PGsugarcrm" cognosSchema="sugarcrm">
+    <jdbcDriver libraryRef="PGSQLLib" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"/>
+    <properties databaseName="sugarcrm" password="spcspc" portNumber="5432" serverName="172.16.186.248" user="postgres"/>
   </dataSource>
 
 	<jndiEntry jndiName="TestPGSQLConnection" value="select 1"/>
@@ -155,7 +254,7 @@
   <!-- START IFX SETUP-->
 
   <library id="IFXLib">
-    <fileset dir="${shared.resource.dir}/IFX" includes="*.jar"/>
+     <fileset dir="${shared.resource.dir}/IFX" includes="*.jar"/>
   </library>
 
   <dataSource jndiName="jdbc/stores_demo" cognosCatalog="stores_demo" cognosDataSource="INFORMIXSample" cognosSchema="sde">
@@ -163,9 +262,37 @@
     <properties.informix databaseName="stores_demo" ifxIFXHOST="172.16.186.241" password="spcspc" portNumber="9088" serverName="ol_informix1210" user="informix"/>
   </dataSource>
 
+
+  <dataSource jndiName="jdbc/csdb" cognosCatalog="stores_demo" cognosDataSource="INFORMIXSample" cognosSchema="sde">
+    <jdbcDriver libraryRef="IFXLib"/>
+    <properties.informix databaseName="csdb" ifxIFXHOST="172.16.186.246" password="cognos" portNumber="9080" serverName="ol_cognoscm" user="informix"/>
+  </dataSource>
+
 	<jndiEntry jndiName="TestIFXConnection" value="SELECT CURRENT FROM systables WHERE tabid=1"/>
 
   <!-- END IFX SETUP-->
+
+  <!-- START TD SETUP-->
+
+  <library id="TDLib">
+       <file name="${shared.resource.dir}/TD/terajdbc4.jar" />
+    <file name= "${shared.resource.dir}/TD/tdgssconfig.jar" />
+
+  </library>
+
+  <dataSource jndiName="jdbc/dbc.financial" cognosCatalog="" cognosDataSource="TDSample" cognosSchema="financial">
+    <jdbcDriver libraryRef="TDLib" javax.sql.ConnectionPoolDataSource="com.teradata.jdbc.TeraConnectionPoolDataSource" className="com.teradata.jdbc.TeraDriver"/>
+	<properties databaseName="dbc" password="dbc" serverName="172.16.186.245" DSName="172.16.186.245" user="dbc" portNumber="1025"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/dbc.retail" cognosCatalog="" cognosDataSource="TDSample" cognosSchema="retail">
+    <jdbcDriver libraryRef="TDLib" javax.sql.ConnectionPoolDataSource="com.teradata.jdbc.TeraConnectionPoolDataSource" className="com.teradata.jdbc.TeraDriver"/>
+	<properties databaseName="dbc" password="dbc" serverName="172.16.186.245" DSName="172.16.186.245" user="dbc" portNumber="1025"/>
+  </dataSource>
+
+	<jndiEntry jndiName="TestTDConnection" value="select 1"/>
+
+  <!-- END TD SETUP-->	
 
   <!-- START DMA SETUP-->
 
@@ -182,7 +309,7 @@
 	<jndiEntry jndiName="CognosPassword" value="Freestyle05$"/>
 	<jndiEntry jndiName="CognosNamespace" value="CognosEx"/>
 	<jndiEntry jndiName="CognosDefaultLocale" value="en-gb"/>
-	<jndiEntry jndiName="CognosLocales" value="en"/>
+	<jndiEntry jndiName="CognosLocales" value="ar, de, en, es, fr, it, nl"/>
 
   <!-- END COGNOS SETUP -->
 
@@ -192,12 +319,72 @@
         <application-bnd>
                 <security-role name="testing">
                   <special-subject type="ALL_AUTHENTICATED_USERS" />
-		  <!--
-			<user name="fram" />
-		  -->
                 </security-role>
         </application-bnd>
   </application>
 
+  <application id="DMA" location="DMA.war" name="DMA">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
+
+  <application id="dmagui" location="dmagui.war" name="dmagui">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
+
+  <application id="dmabeta" location="dmabeta.war" name="dmabeta">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
+
+  <application id="dmaxml" location="dmaxml.war" name="dmaxml">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
+
+  <application id="dmaca" location="dmaca.war" name="dmaca">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
+
+  <application id="dmaconf" location="dmaconf.war" name="dmaconf">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
+
+  <application id="dmaconf1" location="dmaconf1.war" name="dmaconf1">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
+
+  <application id="dmaconf2" location="dmaconf2.war" name="dmaconf2">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+                </security-role>
+        </application-bnd>
+  </application>
 
 </server>
